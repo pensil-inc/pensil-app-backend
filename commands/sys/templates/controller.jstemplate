@@ -1,0 +1,9 @@
+module.exports = class __CONTROLLER_NAME__ {
+    static index(req, res) { }
+
+    static create(req, res) { }
+
+    static update(req, res) { }
+
+    static delete(req, res) { }
+};

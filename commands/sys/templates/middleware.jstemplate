@@ -1,0 +1,9 @@
+'use strict';
+
+function __MIDDLEWARE_NAME__(req, res, next) {
+    // Do your thing
+    console.log("Sample Middleware used!");
+    return next();
+}
+
+module.exports = __MIDDLEWARE_NAME__;

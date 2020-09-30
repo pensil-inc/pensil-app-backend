@@ -1,0 +1,17 @@
+const chalk = require("chalk");
+
+const __COMMAND_NAME__ = {
+    // Command signature
+    signature: "do:something",
+    // Command description
+    description: "This is a default command created by CLI.",
+    /**
+     * Handle function, takes all the args as input
+     */
+    handle: (args = [], dirname = __dirname) => {
+        console.log(chalk.yellow("Hi, I am new command"));
+        return 1;
+    }
+};
+
+module.exports = __COMMAND_NAME__;
