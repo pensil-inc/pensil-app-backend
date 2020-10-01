@@ -1,12 +1,14 @@
 const Validator = require('./validator');
 
-class __VALIDATOR_NAME__ extends Validator {
+class CreateAnnouncementValidator extends Validator {
 
     constructor(data = {}, rules = {}, messages = {}) {
         /**
          * Define You rules here
          */
         rules = {
+            title: "required|string",
+            description: "required|string"
         };
 
         super(data, rules, messages);
@@ -21,7 +23,7 @@ class __VALIDATOR_NAME__ extends Validator {
      * @param {express.Next} next 
      */
     static middleware(req, res, next) {
-        const validator = new __VALIDATOR_NAME__(req.body);
+        const validator = new CreateAnnouncementValidator(req.body);
         // check if data is valid
         if (validator.fails()) {
             // return error in case data invalid
@@ -36,4 +38,4 @@ class __VALIDATOR_NAME__ extends Validator {
 
 }
 
-module.exports = __VALIDATOR_NAME__;
+module.exports = CreateAnnouncementValidator;

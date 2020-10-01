@@ -1,6 +1,12 @@
 "use strict";
 
+const Mongoose = require("mongoose");
 const ValidatorJS = require("validatorjs");
+
+// register a rule for mongoId
+ValidatorJS.register('mongoid', function (value) {
+    return Mongoose.isValidObjectId(value);
+}, 'The :attribute is not a valid id');
 
 /**
  * Create Base Validator, Do not touch
@@ -30,6 +36,13 @@ class Validator {
          * Object to be validated
          */
         this.data = data;
+
+        // covert numeric to string
+        for(const key in this.data) {
+            if(Number.isInteger(this.data[key])) {
+                this.data[key] = this.data[key].toString();
+            }
+        }
 
         /**
          * Validator
@@ -74,7 +87,7 @@ class Validator {
                     this.validated[rule] = null;
                 }
             } else {
-                this.validated[rule] = this.data[rule];
+                this.validated[rule] = isNaN(parseInt(this.data[rule])) ? this.data[rule] : parseInt(this.data[rule]);
             }
         }
     }

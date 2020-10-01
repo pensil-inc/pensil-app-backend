@@ -7,9 +7,8 @@ const Schema = new mongoose.Schema(
             required: true
         },
         mobile: {
-            required: true,
+            required: false,
             type: String,
-            trim: true,
             validate: {
                 validator: value => {
                     return /[0-9]{10}/.test(value);
@@ -17,7 +16,7 @@ const Schema = new mongoose.Schema(
             }
         },
         email: {
-            required: true,
+            required: false,
             trim: true,
             type: String
         },
@@ -26,22 +25,23 @@ const Schema = new mongoose.Schema(
             trim: true,
             type: String
         },
-        isActive: {
-            type: Boolean,
+        role: String,
+        isVerified: {
             required: false,
-            default: true
+            type: Boolean,
+            default: false
         },
-        isDeleted: {
-            default: false,
-            type: Boolean
+        otp: {
+            required: false,
+            type: Number
         },
         createdBy: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Types.ObjectId,
             required: false,
             ref: 'User'
         },
         updatedBy: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Types.ObjectId,
             required: false,
             ref: 'User'
         }
