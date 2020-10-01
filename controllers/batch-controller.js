@@ -9,6 +9,7 @@ module.exports = class BatchController {
      */
     static async index(req, res) {
         const batches = await Batch.find();
+        console.log(req.user);
         return res.json({ batches });
     }
 

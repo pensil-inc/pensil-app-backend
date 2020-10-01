@@ -134,7 +134,7 @@ module.exports = class AuthenticationController {
 
         let userResource = user.toObject();
 
-        userResource.token = await jwt.sign(userResource, 'secretshouldntcomeout');
+        userResource.token = await jwt.sign(userResource, process.env.APP_KEY);
 
         return res.json({ user: new UserLoginResource(userResource) });
 

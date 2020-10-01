@@ -9,6 +9,7 @@ const storage = require("../config/storage");
 const AnnouncementController = require("../controllers/announcement-controller");
 const AuthenticationController = require("../controllers/authentication-controller");
 const BatchController = require("../controllers/batch-controller");
+const AuthMiddleware = require("../middlewares/auth-middleware");
 const LoginValidator = require("../validators/auth/login-validator");
 const RegisterValidator = require("../validators/auth/register-validator");
 const VerifyOTPValidator = require("../validators/auth/verify-otp-validator");
@@ -20,14 +21,14 @@ router.post('/register', RegisterValidator.middleware, AuthenticationController.
 router.post('/verify-otp', VerifyOTPValidator.middleware, AuthenticationController.verifyOTP);
 router.post('/login', LoginValidator.middleware, AuthenticationController.login);
 
-// // Batches
-// router.get('/batch', BatchController.index);
-// router.post('/batch', CreateBatchValidator.middleware, BatchController.create);
+// Batches
+router.get('/batch', AuthMiddleware, BatchController.index);
+router.post('/batch', AuthMiddleware, CreateBatchValidator.middleware, BatchController.create);
 
 
-// // Announcements
-// router.get('/announcement', AnnouncementController.index);
-// router.post('/announcement', CreateAnnouncementValidator.middleware, AnnouncementController.create);
-// router.delete('/announcement/:id', AnnouncementController.delete);
+// Announcements
+router.get('/announcement', AuthMiddleware, AnnouncementController.index);
+router.post('/announcement', AuthMiddleware, CreateAnnouncementValidator.middleware, AnnouncementController.create);
+router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete);
 
 module.exports = router;
