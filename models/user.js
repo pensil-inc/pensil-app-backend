@@ -35,6 +35,11 @@ const Schema = new mongoose.Schema(
             required: false,
             type: Number
         },
+        lastLoginDate: {
+            required: false,
+            default: null,
+            type: Date,
+        },
         createdBy: {
             type: mongoose.Types.ObjectId,
             required: false,

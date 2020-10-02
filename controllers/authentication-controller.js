@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 const ResponseHelper = require('../helpers/response_helper');
 const User = require("../models/user");
@@ -13,7 +14,7 @@ module.exports = class AuthenticationController {
      * @param {*} res 
      */
     static async register(req, res) {
-        const { name, mobile, email, password } = req.body;
+        const { name, mobile, email, password, role } = req.body;
         // if number is provided
         let user = null;
         if (mobile) {
@@ -43,6 +44,7 @@ module.exports = class AuthenticationController {
             name,
             email,
             password: await bcrypt.hash(password, 10),
+            role,
             otp: Math.floor(Math.random() * 9000) + 1000
         });
 
@@ -131,6 +133,9 @@ module.exports = class AuthenticationController {
                 ]
             });
         }
+
+        user.lastLoginDate = moment();
+        await user.save();
 
         let userResource = user.toObject();
 
