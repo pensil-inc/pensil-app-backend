@@ -35,6 +35,10 @@ const Schema = new mongoose.Schema(
             required: false,
             type: Number
         },
+        fcmToken: {
+            required: false,
+            type: String,
+        },
         lastLoginDate: {
             required: false,
             default: null,
