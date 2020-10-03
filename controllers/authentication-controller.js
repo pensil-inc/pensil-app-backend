@@ -43,7 +43,7 @@ module.exports = class AuthenticationController {
             mobile,
             name,
             email,
-            password: await bcrypt.hash(password, parseInt(process.env.HASH_ROUNDS)),
+            password: await bcrypt.hash(password, parseInt(process.env.APP_KEY)),
             role,
             otp: Math.floor(Math.random() * 9000) + 1000
         });

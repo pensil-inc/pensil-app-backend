@@ -13,7 +13,7 @@ class MainHelper {
             name: "New User",
             mobile,
             role: "string",
-            password: await bcrypt.hash(password, parseInt(process.env.HASH_ROUNDS))
+            password: await bcrypt.hash(password, parseInt(process.env.APP_KEY))
         });
 
         // TODO: Send mail / OTP
