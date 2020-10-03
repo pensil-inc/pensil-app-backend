@@ -32,11 +32,11 @@ router.post('/batch', AuthMiddleware, CreateBatchValidator.middleware, BatchCont
 // Announcements
 router.get('/announcement', AuthMiddleware, AnnouncementController.index);
 router.post('/announcement', AuthMiddleware, CreateAnnouncementValidator.middleware, AnnouncementController.create);
-router.post('/announcement/:id', AuthMiddleware, CreateAnnouncementValidator.middleware, AnnouncementController.update);
 router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete);
 
 // Other
 router.get('/get-all-student-list', AuthMiddleware, StudentController.list);
+router.get('/profile', AuthMiddleware, AuthenticationController.profile);
 
 // Student routes
 router.use('/student', AuthMiddleware, (function () {

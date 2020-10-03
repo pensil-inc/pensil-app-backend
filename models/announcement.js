@@ -7,7 +7,13 @@ const Schema = new mongoose.Schema(
             type: mongoose.Types.ObjectId,
             required: false,
             ref: 'User'
-        }
+        },
+        isForAll: Boolean,
+        batches: [{
+            type: mongoose.Types.ObjectId,
+            required: true,
+            ref: 'Batch',
+        }],
     },
     {
         timestamps: true,

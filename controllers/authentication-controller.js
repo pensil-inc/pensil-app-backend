@@ -4,6 +4,7 @@ const moment = require('moment');
 
 const ResponseHelper = require('../helpers/response_helper');
 const OTPMail = require('../mails/otp-mail');
+const user = require('../models/user');
 const User = require("../models/user");
 const UserLoginResource = require('../resources/user-login-resource');
 
@@ -50,7 +51,7 @@ module.exports = class AuthenticationController {
         });
 
         // TODO: send otp via some mean
-        if(user.email) {
+        if (user.email) {
             (new OTPMail({
                 to: user.email
             }, {
@@ -154,5 +155,9 @@ module.exports = class AuthenticationController {
         return res.json({ user: new UserLoginResource(userResource) });
 
 
+    }
+
+    static async profile(req, res) {
+        return res.json({ user: req.user });
     }
 };

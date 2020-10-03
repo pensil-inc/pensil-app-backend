@@ -7,7 +7,10 @@ class CreateAnnouncementValidator extends Validator {
          * Define You rules here
          */
         rules = {
-            description: "required|string"
+            description: "required|string",
+            isForAll: "required|boolean",
+            batches: "array",
+            "batches.*": "mongoid",
         };
 
         super(data, rules, messages);
