@@ -5,6 +5,7 @@ const ResponseHelper = require("../helpers/response_helper");
 const Batch = require("../models/batch");
 const Subject = require("../models/subject");
 const User = require("../models/user");
+const BatchWithStudentResource = require("../resources/batch-with-student-resource");
 
 module.exports = class BatchController {
     /**
@@ -13,9 +14,9 @@ module.exports = class BatchController {
      * @param {*} res 
      */
     static async index(req, res) {
-        const batches = await Batch.find({ owner: req.user.id });
+        const batches = await Batch.find({ owner: req.user.id }).populate('students');
 
-        return res.json({ batches });
+        return res.json({ batches: new BatchWithStudentResource(batches) });
     }
 
     /**
