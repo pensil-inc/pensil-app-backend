@@ -8,8 +8,14 @@ class CreateBatchValidator extends Validator {
          */
         rules = {
             name: "required|string",
-            startTime: "required|date",
-            endTime: "required|date"
+            description: "required|string",
+            subject: "string",
+            classes: "array|required",
+            "classes.*.dayOfWeek": "required|integer|min:1|max:7",
+            "classes.*.startTime": 'required|string|min:5|max:5',
+            "classes.*.endTime": 'required|string|min:5|max:5',
+            students: "array|required",
+            "students.*": "required|digit:10"
         };
 
         super(data, rules, messages);

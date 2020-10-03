@@ -3,22 +3,26 @@ const mongoose = require("mongoose");
 const Schema = new mongoose.Schema(
     {
         name: String,
+        owner: {
+            type: mongoose.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
+        classes: [{
+            dayOfWeek: Number,
+            startTime: String,
+            endTime: String,
+        }],
         subject: {
             type: mongoose.Types.ObjectId,
+            ref: "Subject",
             required: false
         },
-        startTime: Date,
-        endTime: Date,
-        createdBy: {
+        students: [{
             type: mongoose.Types.ObjectId,
-            required: false,
-            ref: 'User'
-        },
-        updatedBy: {
-            type: mongoose.Types.ObjectId,
-            required: false,
-            ref: 'User'
-        }
+            ref: "User",
+            required: true
+        }]
     },
     {
         timestamps: true,
