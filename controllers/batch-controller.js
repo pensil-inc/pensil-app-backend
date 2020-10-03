@@ -64,9 +64,9 @@ module.exports = class BatchController {
 
         // check if class timings okay
         const invalidClasses = classes.map(timing => {
-            const startTime = parseInt(timing.startTime.split(":")[0]);
-            const endTime = parseInt(timing.endTime.split(":")[0]);
-            if (startTime >= endTime || endTime > 24) {
+            const startTime = parseInt(timing.startTime.replace(/:/g, ""));
+            const endTime = parseInt(timing.endTime.replace(/:/g, ""));
+            if (startTime >= endTime || endTime > 2400) {
                 return getDayOfWeek(timing.dayOfWeek) + " " + timing.startTime + "-" + timing.endTime + " is invalid timing!";
             } else {
                 return false;
