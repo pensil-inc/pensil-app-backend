@@ -8,7 +8,7 @@ class RegisterValidator extends Validator {
          */
         rules = {
             name: "string|required",
-            mobile: "integer|required_without:email|digits:10",
+            mobile: "integer|required_without:email|digit:10",
             email: "email|required_without:mobile",
             role: "string|required|in:student,teacher",
             password: "string|required",

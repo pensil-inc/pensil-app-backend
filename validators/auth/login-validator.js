@@ -7,7 +7,7 @@ class LoginValidator extends Validator {
          * Define You rules here
          */
         rules = {
-            mobile: "integer|required_without:email|digits:10",
+            mobile: "integer|required_without:email|digit:10",
             email: "email|required_without:mobile",
             password: "string|required",
         };
