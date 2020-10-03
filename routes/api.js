@@ -10,6 +10,7 @@ const AnnouncementController = require("../controllers/announcement-controller")
 const AuthenticationController = require("../controllers/authentication-controller");
 const BatchController = require("../controllers/batch-controller");
 const StudentController = require("../controllers/student-controller");
+const StudentAnnouncementController = require("../controllers/student/student-announcement-controller");
 const StudentBatchController = require("../controllers/student/student-batch-controller");
 const AuthMiddleware = require("../middlewares/auth-middleware");
 const LoginValidator = require("../validators/auth/login-validator");
@@ -42,6 +43,7 @@ router.use('/student', AuthMiddleware, (function () {
     const router = express.Router();
 
     router.get('/my-batches', StudentBatchController.index);
+    router.get('/my-announcements', StudentAnnouncementController.index);
 
     return router;
 })());
