@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
 class MainHelper {
-    static async sendInvite(mobile, role = "student") {
+    static async sendInviteToMobile(mobile, role = "student") {
         const password = crypto.randomBytes(4).toString('hex');
 
         if (await User.exists({ mobile })) {
@@ -16,7 +16,7 @@ class MainHelper {
             password: await bcrypt.hash(password, parseInt(process.env.APP_KEY))
         });
 
-        // TODO: Send mail / OTP
+        // TODO: Send OTP
 
         return user;
     }

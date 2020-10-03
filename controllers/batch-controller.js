@@ -56,7 +56,7 @@ module.exports = class BatchController {
             });
             // if not available, invite him/her
             if (!s) {
-                s = await MainHelper.sendInvite(students[i])
+                s = await MainHelper.sendInviteToMobile(students[i])
             }
 
             students[i] = s._id;
