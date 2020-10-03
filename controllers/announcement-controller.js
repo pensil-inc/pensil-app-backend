@@ -3,6 +3,7 @@ const { response } = require("..");
 const ResponseHelper = require("../helpers/response_helper");
 const Announcement = require("../models/announcement");
 const Batch = require("../models/batch");
+const AnnouncementNotification = require("../notifications/announcement-notification");
 
 module.exports = class AnnouncementController {
     /**
@@ -52,6 +53,13 @@ module.exports = class AnnouncementController {
             batches: !isForAll ? batches : [],
             owner: req.user.id
         });
+
+        // TODO: broadcast this announcement (notify the users)
+        if (isForAll) {
+            AnnouncementNotification.toAll(announcement);
+        } else {
+            AnnouncementNotification.toBatches(batches, announcement);
+        }
 
         return res.json({ announcement });
     }
