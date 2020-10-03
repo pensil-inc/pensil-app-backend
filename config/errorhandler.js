@@ -1,4 +1,9 @@
 module.exports = function(err, req, res, next) {
-    // return res.status(500).json({ error: err.message });
-  next(err);
+  if(process.env.APP_ENV === 'development') {
+    // TODO: Log the error
+    console.log(err);
+    next(err);
+  } else {
+    return res.status(500).json({ error: err.message });
+  }
 };
