@@ -9,6 +9,7 @@ const storage = require("../config/storage");
 const AnnouncementController = require("../controllers/announcement-controller");
 const AuthenticationController = require("../controllers/authentication-controller");
 const BatchController = require("../controllers/batch-controller");
+const StudentController = require("../controllers/student-controller");
 const StudentBatchController = require("../controllers/student/student-batch-controller");
 const AuthMiddleware = require("../middlewares/auth-middleware");
 const LoginValidator = require("../validators/auth/login-validator");
@@ -31,6 +32,9 @@ router.post('/batch', AuthMiddleware, CreateBatchValidator.middleware, BatchCont
 router.get('/announcement', AuthMiddleware, AnnouncementController.index);
 router.post('/announcement', AuthMiddleware, CreateAnnouncementValidator.middleware, AnnouncementController.create);
 router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete);
+
+// Other
+router.get('/get-all-student-list', AuthMiddleware, StudentController.list);
 
 // Student routes
 router.use('/student', AuthMiddleware, (function () {
