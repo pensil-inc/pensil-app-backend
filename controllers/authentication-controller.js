@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const moment = require('moment');
 
 const ResponseHelper = require('../helpers/response_helper');
+const OTPMail = require('../mails/otp-mail');
 const User = require("../models/user");
 const UserLoginResource = require('../resources/user-login-resource');
 
@@ -49,7 +50,16 @@ module.exports = class AuthenticationController {
         });
 
         // TODO: send otp via some mean
+        if(user.email) {
+            (new OTPMail({
+                to: user.email
+            }, {
+                otp: user.otp,
+                user
+            })).send()
+        }
 
+        // return response
         return res.json({ message: "User registered successfully!" });
     }
 
