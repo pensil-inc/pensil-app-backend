@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
 class MainHelper {
-    static async sendInvite(mobile) {
+    static async sendInvite(mobile, role = "student") {
         const password = crypto.randomBytes(4).toString('hex');
 
         if (await User.exists({ mobile })) {
@@ -12,7 +12,7 @@ class MainHelper {
         const user = await User.create({
             name: "New User",
             mobile,
-            role: "string",
+            role,
             password: await bcrypt.hash(password, parseInt(process.env.APP_KEY))
         });
 
