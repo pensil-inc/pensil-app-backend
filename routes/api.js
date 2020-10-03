@@ -12,6 +12,7 @@ const BatchController = require("../controllers/batch-controller");
 const StudentController = require("../controllers/student-controller");
 const StudentAnnouncementController = require("../controllers/student/student-announcement-controller");
 const StudentBatchController = require("../controllers/student/student-batch-controller");
+const StudentNotificationController = require("../controllers/student/student-notification-controller");
 const AuthMiddleware = require("../middlewares/auth-middleware");
 const LoginValidator = require("../validators/auth/login-validator");
 const RegisterValidator = require("../validators/auth/register-validator");
@@ -44,8 +45,11 @@ router.use('/student', AuthMiddleware, (function () {
 
     router.get('/my-batches', StudentBatchController.index);
     router.get('/my-announcements', StudentAnnouncementController.index);
+    router.get('/my-notifications', StudentNotificationController.index);
 
     return router;
 })());
+
+router.get('/test', async (req, res) => { return res.json({}) });
 
 module.exports = router;
