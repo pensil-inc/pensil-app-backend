@@ -7,7 +7,6 @@ class CreateAnnouncementValidator extends Validator {
          * Define You rules here
          */
         rules = {
-            title: "required|string",
             description: "required|string"
         };
 

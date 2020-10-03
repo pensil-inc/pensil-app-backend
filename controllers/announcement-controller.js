@@ -9,7 +9,7 @@ module.exports = class AnnouncementController {
      * @param {*} res 
      */
     static async index(req, res) {
-        const announcements = await Announcement.find();
+        const announcements = await Announcement.find({ owner: req.user.id });
         return res.json({ announcements })
     }
 
@@ -19,11 +19,44 @@ module.exports = class AnnouncementController {
      * @param {*} res 
      */
     static async create(req, res) {
-        const announcement = await Announcement.create(req.body);
+        const { description } = req.body;
+        const announcement = await Announcement.create({
+            description,
+            owner: req.user.id
+        });
         return res.json({ announcement });
     }
 
-    static update(req, res) { }
+    static async update(req, res) {
+        const { id } = req.params;
+        const { description } = req.body;
+
+        if (!Mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        const announcement = await Announcement.findOne({
+            _id: id,
+            owner: req.user.id
+        });
+
+        if (!announcement) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        announcement.description = description;
+        await announcement.save();
+
+        return res.json({
+            message: "Announcement updated!",
+            announcement
+        })
+
+    }
 
     static async delete(req, res) {
         const { id } = req.params;
@@ -34,17 +67,23 @@ module.exports = class AnnouncementController {
             });
         }
 
-        const announcement = await Announcement.findById(id);
+        const announcement = await Announcement.findOne({
+            _id: id,
+            owner: req.user.id
+        });
 
         if (!announcement) {
             return res.status(404).json({
                 message: "Resource with specific id not found"
             });
         }
-        
+
         await announcement.remove();
 
-        return res.json({ announcement })
+        return res.json({
+            message: "Announcement deleted!",
+            announcement
+        })
 
     }
 };
