@@ -15,6 +15,7 @@ class MainHelper {
             name: "New User",
             mobile,
             role,
+            isVerified: true,
             password: await bcrypt.hash(password, parseInt(process.env.APP_KEY))
         });
 
