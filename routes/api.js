@@ -9,6 +9,7 @@ const storage = require("../config/storage");
 const AnnouncementController = require("../controllers/announcement-controller");
 const AuthenticationController = require("../controllers/authentication-controller");
 const BatchController = require("../controllers/batch-controller");
+const PollController = require("../controllers/poll-controller");
 const StudentController = require("../controllers/student-controller");
 const StudentAnnouncementController = require("../controllers/student/student-announcement-controller");
 const StudentBatchController = require("../controllers/student/student-batch-controller");
@@ -19,6 +20,7 @@ const RegisterValidator = require("../validators/auth/register-validator");
 const VerifyOTPValidator = require("../validators/auth/verify-otp-validator");
 const CreateBatchValidator = require("../validators/batch/create-batch-validator");
 const CreateAnnouncementValidator = require("../validators/create-announcement-validator");
+const CreatePollValidator = require("../validators/poll/create-poll-validator");
 
 // Authentication Routes
 router.post('/register', RegisterValidator.middleware, AuthenticationController.register);
@@ -34,6 +36,11 @@ router.post('/batch', AuthMiddleware, CreateBatchValidator.middleware, BatchCont
 router.get('/announcement', AuthMiddleware, AnnouncementController.index);
 router.post('/announcement', AuthMiddleware, CreateAnnouncementValidator.middleware, AnnouncementController.create);
 router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete);
+
+// Polls
+router.get('/poll', AuthMiddleware, PollController.index);
+router.post('/poll', AuthMiddleware, CreatePollValidator.middleware, PollController.create);
+router.delete('/poll/:id', AuthMiddleware, PollController.delete);
 
 // Other
 router.get('/get-all-student-list', AuthMiddleware, StudentController.list);
