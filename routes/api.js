@@ -14,12 +14,14 @@ const StudentController = require("../controllers/student-controller");
 const StudentAnnouncementController = require("../controllers/student/student-announcement-controller");
 const StudentBatchController = require("../controllers/student/student-batch-controller");
 const StudentNotificationController = require("../controllers/student/student-notification-controller");
+const StudentPollController = require("../controllers/student/student-poll-controller");
 const AuthMiddleware = require("../middlewares/auth-middleware");
 const LoginValidator = require("../validators/auth/login-validator");
 const RegisterValidator = require("../validators/auth/register-validator");
 const VerifyOTPValidator = require("../validators/auth/verify-otp-validator");
 const CreateBatchValidator = require("../validators/batch/create-batch-validator");
 const CreateAnnouncementValidator = require("../validators/create-announcement-validator");
+const PollVoteValidator = require("../validators/poll-vote-validator");
 const CreatePollValidator = require("../validators/poll/create-poll-validator");
 
 // Authentication Routes
@@ -53,6 +55,7 @@ router.use('/student', AuthMiddleware, (function () {
     router.get('/my-batches', StudentBatchController.index);
     router.get('/my-announcements', StudentAnnouncementController.index);
     router.get('/my-notifications', StudentNotificationController.index);
+    router.post('/poll/:id/vote', PollVoteValidator.middleware, StudentPollController.vote);
 
     return router;
 })());
