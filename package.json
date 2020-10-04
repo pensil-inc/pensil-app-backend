@@ -29,6 +29,7 @@
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
     "nodemailer": "^6.4.11",
+    "twilio": "^3.49.4",
     "validatorjs": "^3.19.0",
     "web-push": "^3.4.4"
   },
