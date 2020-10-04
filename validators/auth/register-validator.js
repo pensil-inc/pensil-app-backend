@@ -10,7 +10,7 @@ class RegisterValidator extends Validator {
             name: "string|required",
             mobile: "integer|required_without:email|digit:10",
             email: "email|required_without:mobile",
-            role: "string|required|in:student,teacher",
+            // role: "string|required|in:student,teacher",
             password: "string|required",
         };
 

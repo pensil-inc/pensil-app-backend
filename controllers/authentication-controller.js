@@ -16,7 +16,7 @@ module.exports = class AuthenticationController {
      * @param {*} res 
      */
     static async register(req, res) {
-        const { name, mobile, email, password, role } = req.body;
+        const { name, mobile, email, password } = req.body;
         // if number is provided
         let user = null;
         if (mobile) {
@@ -46,7 +46,7 @@ module.exports = class AuthenticationController {
             name,
             email,
             password: await bcrypt.hash(password, parseInt(process.env.APP_KEY)),
-            role,
+            role: "student",
             otp: Math.floor(Math.random() * 9000) + 1000
         });
 
