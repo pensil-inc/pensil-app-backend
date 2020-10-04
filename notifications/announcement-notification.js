@@ -3,6 +3,7 @@ const Batch = require("../models/batch");
 const User = require("../models/user");
 const Notification = require("./notification");
 const NotificationModel = require("../models/notification");
+const SMS = require("../config/twilio");
 
 module.exports = class AnnouncementNotification extends Notification {
 
@@ -57,7 +58,7 @@ module.exports = class AnnouncementNotification extends Notification {
         // send mail
         await this.sendMail(user);
         // await this.sendPush(user);
-        // await this.sendSMS(user);
+        await this.sendSMS(user);
         return await NotificationModel.create({
             title: this.body,
             user
@@ -74,7 +75,10 @@ module.exports = class AnnouncementNotification extends Notification {
                 message: this.body
             });
 
-            await mail.send();
+            mail.send().catch(error => {
+                // TODO: Handle error
+                console.log(error);
+            });
 
             return true;
         } else {
@@ -88,5 +92,12 @@ module.exports = class AnnouncementNotification extends Notification {
 
     async sendSMS(user) {
         // Build sms and send it
+        if (user.mobile) {
+            const sms = new SMS("+91" + user.mobile, this.body);
+            sms.send().catch(error => {
+                // TODO: Handle error
+                console.log(error);
+            });
+        }
     }
 }
