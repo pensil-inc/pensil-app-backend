@@ -1,4 +1,5 @@
 const Announcement = require("../../models/announcement");
+const Batch = require("../../models/batch");
 
 module.exports = class StudentAnnouncementController {
     /**
@@ -8,13 +9,17 @@ module.exports = class StudentAnnouncementController {
      */
     static async index(req, res) {
         // TODO: Add filter to get announcement only for him
-        const announcements = await Announcement.find();
-        return res.json({ announcements })
+        // get batches for user
+        const batches = (await Batch.find({
+            students: req.user.id
+        })).map(batch => batch.id);
+
+        const announcements = await Announcement.find({
+            $or: [
+                { isForAll: true },
+                { batches: { $in: batches } }
+            ]
+        });
+        return res.json({ count: announcements.length, announcements })
     }
-
-    static create(req, res) { }
-
-    static update(req, res) { }
-
-    static delete(req, res) { }
 };
