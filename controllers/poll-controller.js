@@ -9,7 +9,7 @@ module.exports = class PollController {
      * @param {*} res 
      */
     static async index(req, res) {
-        const polls = await Poll.find({ owner: req.user.id });
+        const polls = await Poll.find({ owner: req.user.id }).populate('answers.student');
 
         return res.json({ polls: new PollResource(polls) })
     }

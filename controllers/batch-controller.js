@@ -14,7 +14,7 @@ module.exports = class BatchController {
      * @param {*} res 
      */
     static async index(req, res) {
-        const batches = await Batch.find({ owner: req.user.id }).populate('students');
+        const batches = await Batch.find({ owner: req.user.id }).populate('students').populate('subject');
 
         return res.json({ batches: new BatchWithStudentResource(batches) });
     }

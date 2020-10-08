@@ -55,6 +55,7 @@ router.use('/student', AuthMiddleware, (function () {
     router.get('/my-batches', StudentBatchController.index);
     router.get('/my-announcements', StudentAnnouncementController.index);
     router.get('/my-notifications', StudentNotificationController.index);
+    router.get('/my-polls', StudentPollController.index);
     router.post('/poll/:id/vote', PollVoteValidator.middleware, StudentPollController.vote);
 
     return router;

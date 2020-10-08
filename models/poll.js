@@ -17,7 +17,11 @@ const Schema = new mongoose.Schema(
             ref: 'Batch',
         }],
         answers: [{
-            student: mongoose.Types.ObjectId,
+            student: {
+                type: mongoose.Types.ObjectId,
+                required: true,
+                ref: "User",
+            },
             option: String
         }]
     },
