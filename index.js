@@ -53,7 +53,9 @@ const port = process.env.PORT || 1000;
 /**
  * Initialize Logger
  */
-app.use(logger('dev'));
+if (process.env.NODE_ENV !== "test") {
+  app.use(logger('dev'));
+}
 
 /**
  * Static Path
@@ -64,7 +66,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Use body parser and form and web push
  */
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload());
 
