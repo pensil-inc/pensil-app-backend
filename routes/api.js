@@ -15,6 +15,7 @@ const StudentAnnouncementController = require("../controllers/student/student-an
 const StudentBatchController = require("../controllers/student/student-batch-controller");
 const StudentNotificationController = require("../controllers/student/student-notification-controller");
 const StudentPollController = require("../controllers/student/student-poll-controller");
+const SubjectController = require("../controllers/subject-controller");
 const AuthMiddleware = require("../middlewares/auth-middleware");
 const LoginValidator = require("../validators/auth/login-validator");
 const RegisterValidator = require("../validators/auth/register-validator");
@@ -47,6 +48,7 @@ router.delete('/poll/:id', AuthMiddleware, PollController.delete);
 // Other
 router.get('/get-all-student-list', AuthMiddleware, StudentController.list);
 router.get('/profile', AuthMiddleware, AuthenticationController.profile);
+router.get('/subjects', AuthMiddleware, SubjectController.list);
 
 // Student routes
 router.use('/student', AuthMiddleware, (function () {
