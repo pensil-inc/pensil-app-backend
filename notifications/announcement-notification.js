@@ -4,6 +4,7 @@ const User = require("../models/user");
 const Notification = require("./notification");
 const NotificationModel = require("../models/notification");
 const SMS = require("../config/twilio");
+const firebaseAdmin = require("../config/firebase");
 
 module.exports = class AnnouncementNotification extends Notification {
 
@@ -57,7 +58,7 @@ module.exports = class AnnouncementNotification extends Notification {
         // TODO: add push notification here
         // send mail
         await this.sendMail(user);
-        // await this.sendPush(user);
+        await this.sendPush(user);
         await this.sendSMS(user);
         return await NotificationModel.create({
             title: this.body,
@@ -88,6 +89,19 @@ module.exports = class AnnouncementNotification extends Notification {
 
     async sendPush(user) {
         // Build push and send it
+        try {
+            if (user.fcmToken) {
+                console.log(await firebaseAdmin.messaging().send({
+                    token: user.fcmToken,
+                    notification: {
+                        title: this.title,
+                        body: this.body
+                    },
+                }));
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async sendSMS(user) {
