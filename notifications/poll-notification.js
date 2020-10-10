@@ -4,6 +4,7 @@ const User = require("../models/user");
 const Notification = require("./notification");
 const NotificationModel = require("../models/notification");
 const SMS = require("../config/twilio");
+const firebaseAdmin = require("../config/firebase");
 
 module.exports = class PollNotification extends Notification {
 
@@ -57,7 +58,7 @@ module.exports = class PollNotification extends Notification {
         // TODO: add push notification here
         // send mail
         await this.sendMail(user);
-        // await this.sendPush(user);
+        await this.sendPush(user);
         await this.sendSMS(user);
         return await NotificationModel.create({
             title: this.body,
@@ -66,38 +67,60 @@ module.exports = class PollNotification extends Notification {
     }
 
     async sendMail(user) {
-        if (user.email) {
-            const mail = new PollMail({
-                to: user.email,
-                subject: this.title,
-            }, {
-                user: user,
-                message: this.body
-            });
+        try {
 
-            mail.send().catch(error => {
-                // TODO: Handle error
-                console.log(error);
-            });
+            if (user.email) {
+                const mail = new PollMail({
+                    to: user.email,
+                    subject: this.title,
+                }, {
+                    user: user,
+                    message: this.body
+                });
 
-            return true;
-        } else {
-            return false;
+                mail.send().catch(error => {
+                    // TODO: Handle error
+                    console.log(error);
+                });
+
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.error(error);
         }
     }
 
     async sendPush(user) {
         // Build push and send it
+        try {
+            if (user.fcmToken) {
+                console.log(await firebaseAdmin.messaging().send({
+                    token: user.fcmToken,
+                    notification: {
+                        title: this.title,
+                        body: this.body
+                    },
+                }));
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     async sendSMS(user) {
         // Build sms and send it
-        if (user.mobile) {
-            const sms = new SMS("+91" + user.mobile, this.body);
-            sms.send().catch(error => {
-                // TODO: Handle error
-                console.log(error);
-            });
+        try {
+            if (user.mobile) {
+                const sms = new SMS("+91" + user.mobile, this.body);
+                sms.send().catch(error => {
+                    // TODO: Handle error
+                    console.log(error);
+                });
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 }
