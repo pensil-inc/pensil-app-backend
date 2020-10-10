@@ -112,7 +112,7 @@ module.exports = class AuthenticationController {
     }
 
     static async login(req, res) {
-        const { mobile, email, password } = req.body;
+        const { mobile, email, password, fcmToken } = req.body;
 
         let user = null;
 
@@ -146,6 +146,11 @@ module.exports = class AuthenticationController {
         }
 
         user.lastLoginDate = moment();
+    
+        if(fcmToken) {
+            user.fcmToken = fcmToken;
+        }
+
         await user.save();
 
         let userResource = user.toObject();

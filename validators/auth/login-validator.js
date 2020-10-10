@@ -9,6 +9,7 @@ class LoginValidator extends Validator {
         rules = {
             mobile: "integer|required_without:email|digit:10",
             email: "email|required_without:mobile",
+            fcmToken: "string",
             password: "string|required",
         };
 
