@@ -7,12 +7,14 @@ module.exports = class Notification {
   }
 
   async send() {
-    if (Array.isArray(this.user)) {
-      for (const user of this.user) {
-        await this.trigger(user);
+    if (process.env.NODE_ENV !== "test") {
+      if (Array.isArray(this.user)) {
+        for (const user of this.user) {
+          await this.trigger(user);
+        }
+      } else {
+        await this.trigger(this.user);
       }
-    } else {
-      await this.trigger(this.user);
     }
   }
 
