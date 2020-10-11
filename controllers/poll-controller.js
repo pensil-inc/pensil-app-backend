@@ -1,4 +1,5 @@
 const Poll = require("../models/poll");
+const Mongoose = require("mongoose");
 const PollNotification = require("../notifications/poll-notification");
 const PollResource = require("../resources/poll-resource");
 
