@@ -14,7 +14,7 @@ module.exports = class VideoController {
 
     // Add a new video
     static async create(req, res) {
-        const { title, description, subject, duration, url, quality, isPrivate } = req.body;
+        const { title, description, subject, duration, videoUrl, thumbnailUrl, quality, isPrivate } = req.body;
 
         // check if subject exists
         const subjectObj = await Subject.findOne({ name: subject });
@@ -29,7 +29,8 @@ module.exports = class VideoController {
             subject: subjectObj._id,
             description,
             duration,
-            url,
+            videoUrl,
+            thumbnailUrl,
             quality,
             isPrivate
         });
@@ -47,7 +48,7 @@ module.exports = class VideoController {
     static async update(req, res) {
         const { id } = req.params;
 
-        const { title, description, subject, duration, url, quality, isPrivate } = req.body;
+        const { title, description, subject, duration, videoUrl, thumbnailUrl, quality, isPrivate } = req.body;
 
         if (!Mongoose.isValidObjectId(id)) {
             return res.status(404).json({
@@ -76,7 +77,8 @@ module.exports = class VideoController {
         video.subject = subjectObj._id;
         video.description = description;
         video.duration = duration;
-        video.url = url;
+        video.thumbnailUrl = thumbnailUrl;
+        video.videoUrl = videoUrl;
         video.quality = quality;
         video.isPrivate = isPrivate;
 

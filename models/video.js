@@ -16,7 +16,11 @@ const Schema = new mongoose.Schema(
             type: mongoose.Types.ObjectId,
             ref: "Subject"
         },
-        url: String,
+        thumbnailUrl: {
+            required: false,
+            type: String
+        },
+        videoUrl: String,
         quality: {
             required: false,
             type: String,

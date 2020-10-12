@@ -11,7 +11,8 @@ class CreateVideoValidator extends Validator {
             description: "string",
             subject: "string|required",
             duration: "string",
-            url: "string|required|url",
+            thumbnailUrl: "string|url",
+            videoUrl: "string|required|url",
             quality: "string",
             isPrivate: "boolean",
         };
