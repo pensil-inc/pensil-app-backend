@@ -36,6 +36,7 @@ router.post('/login', LoginValidator.middleware, AuthenticationController.login)
 // Batches
 router.get('/batch', AuthMiddleware, BatchController.index);
 router.post('/batch', AuthMiddleware, CreateBatchValidator.middleware, BatchController.create);
+router.get('/batch/:id', AuthMiddleware, BatchController.details);
 
 
 // Announcements

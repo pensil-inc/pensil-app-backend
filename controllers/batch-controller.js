@@ -2,9 +2,13 @@ const moment = require("moment");
 const mongoose = require("mongoose");
 const MainHelper = require("../helpers/main_helper");
 const ResponseHelper = require("../helpers/response_helper");
+const Announcement = require("../models/announcement");
 const Batch = require("../models/batch");
+const Material = require("../models/material");
 const Subject = require("../models/subject");
 const User = require("../models/user");
+const Video = require("../models/video");
+const BatchDetailResource = require("../resources/batch-detail-resource");
 const BatchWithStudentResource = require("../resources/batch-with-student-resource");
 
 module.exports = class BatchController {
@@ -93,6 +97,45 @@ module.exports = class BatchController {
         });
 
         return res.json({ batch });
+    }
+
+    // get details
+    static async details(req, res) {
+
+        const { id } = req.params;
+
+        // if invalid id, return error
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        // get batch
+        const batch = await (await Batch.findById(id).populate('students').populate('subject'));
+
+        // if batch not found, return 404
+        if (!batch) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        // get announcements
+        batch.announcements = await Announcement.find({batches: batch._id});
+
+        // get videos
+        batch.videos = await Video.find({batch: batch._id});
+
+        // get materials
+        batch.materials = await Material.find({ batch: batch._id });
+
+        // return batch details
+        return res.json({
+            message: "Batch details",
+            batch: new BatchDetailResource(batch)
+        });
+
     }
 
     static update(req, res) { }
