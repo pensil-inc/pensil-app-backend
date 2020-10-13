@@ -11,6 +11,11 @@ const Schema = new mongoose.Schema(
             required: false,
             type: String,
         },
+        batch: {
+            required: true,
+            type: mongoose.Types.ObjectId,
+            ref: "Batch"
+        },
         subject: {
             required: true,
             type: mongoose.Types.ObjectId,

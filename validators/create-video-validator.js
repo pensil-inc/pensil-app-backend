@@ -9,6 +9,7 @@ class CreateVideoValidator extends Validator {
         rules = {
             title: "required|string",
             description: "string",
+            batchId: "mongoid|required",
             subject: "string|required",
             duration: "string",
             thumbnailUrl: "string|url",
