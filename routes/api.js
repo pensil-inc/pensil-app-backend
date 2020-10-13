@@ -9,6 +9,7 @@ const storage = require("../config/storage");
 const AnnouncementController = require("../controllers/announcement-controller");
 const AuthenticationController = require("../controllers/authentication-controller");
 const BatchController = require("../controllers/batch-controller");
+const MaterialController = require("../controllers/material-controller");
 const PollController = require("../controllers/poll-controller");
 const StudentController = require("../controllers/student-controller");
 const StudentAnnouncementController = require("../controllers/student/student-announcement-controller");
@@ -52,6 +53,13 @@ router.get('/video', AuthMiddleware, VideoController.index);
 router.post('/video', AuthMiddleware, CreateVideoValidator.middleware, VideoController.create);
 router.post('/video/:id', AuthMiddleware, CreateVideoValidator.middleware, VideoController.update);
 router.delete('/video/:id', AuthMiddleware, VideoController.delete);
+
+// materials
+router.get('/material', AuthMiddleware, MaterialController.index);
+router.post('/material', AuthMiddleware, MaterialController.create);
+router.post('/material/:id/upload', AuthMiddleware, MaterialController.updateMaterial);
+router.post('/material/:id', AuthMiddleware, MaterialController.update);
+router.delete('/material/:id', AuthMiddleware, MaterialController.delete);
 
 // Other
 router.get('/get-all-student-list', AuthMiddleware, StudentController.list);

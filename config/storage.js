@@ -63,7 +63,17 @@
 //   module.exports = storage;
 
 const path = require('path');
+const AppConfig = require('./app');
 
+const storagePath = path.join(process.cwd(), "public");
+const materialPath = path.join(storagePath, 'materials')
 module.exports = {
-    storageDir: 'storage',
+    storageDir: 'public',
+    storagePath,
+    materialPath,
+    getRelativePath: (...paths) => path.join(...paths),
+    getFilePath: (...paths) => path.join(storagePath, ...paths),
+    getMaterialPath: (...paths) => path.join(storagePath, "materials", ...paths),
+    getFileLink: name => AppConfig.app_url + name,
+    getMaterialLink: name => AppConfig.app_url + "/materials/" + name,
 }
