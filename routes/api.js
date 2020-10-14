@@ -50,13 +50,13 @@ router.post('/poll', AuthMiddleware, CreatePollValidator.middleware, PollControl
 router.delete('/poll/:id', AuthMiddleware, PollController.delete);
 
 // Videos
-router.get('/video', AuthMiddleware, VideoController.index);
+router.get('/batch/:batchId/video', AuthMiddleware, VideoController.index);
 router.post('/video', AuthMiddleware, CreateVideoValidator.middleware, VideoController.create);
 router.post('/video/:id', AuthMiddleware, CreateVideoValidator.middleware, VideoController.update);
 router.delete('/video/:id', AuthMiddleware, VideoController.delete);
 
 // materials
-router.get('/material', AuthMiddleware, MaterialController.index);
+router.get('/batch/:batchId/material', AuthMiddleware, MaterialController.index);
 router.post('/material', AuthMiddleware, MaterialController.create);
 router.post('/material/:id/upload', AuthMiddleware, MaterialController.updateMaterial);
 router.post('/material/:id', AuthMiddleware, MaterialController.update);

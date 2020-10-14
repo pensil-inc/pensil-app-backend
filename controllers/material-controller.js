@@ -5,13 +5,26 @@ const Batch = require("../models/batch");
 const Material = require("../models/material");
 const Subject = require("../models/subject");
 const MaterialResource = require("../resources/material-resource");
+const moment = require('moment');
 const { v4: uuid } = require('uuid');
 const { promises: fs } = require('fs');
 
 module.exports = class MaterialController {
     // Get list of materials
     static async index(req, res) {
-        const materials = await Material.find({}).populate('subject').populate('batch');
+        const { batchId } = req.params;
+
+        const batch = await Batch.findById(batchId);
+
+        if (!batch) {
+            return ResponseHelper.validationResponse(res, {
+                batchId: ["Invalid Batch Id!"]
+            })
+        }
+
+        const materials = await Material.find({
+            batch: batch._id
+        }).populate('subject').populate('batch');
 
         return res.json({ materials: new MaterialResource(materials) });
     }
@@ -96,7 +109,7 @@ module.exports = class MaterialController {
         // save file info
         material.file = fileName;
         material.fileType = mimetype;
-        material.fileUploadedOn = new Date();
+        material.fileUploadedOn = moment().toISOString();
         await material.save();
 
         return res.json({ material: new MaterialResource(material) });

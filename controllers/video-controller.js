@@ -8,7 +8,19 @@ const VideoResource = require("../resources/video-resource");
 module.exports = class VideoController {
     // List all videos
     static async index(req, res) {
-        const videos = await Video.find({}).populate('subject').populate('batch');
+        const { batchId } = req.params;
+
+        const batch = await Batch.findById(batchId);
+
+        if (!batch) {
+            return ResponseHelper.validationResponse(res, {
+                batchId: ["Invalid Batch Id!"]
+            })
+        }
+
+        const videos = await Video.find({
+            batch: batch._id
+        }).populate('subject').populate('batch');
 
         return res.json({ videos: new VideoResource(videos) });
     }
