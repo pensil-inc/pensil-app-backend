@@ -46,12 +46,12 @@ module.exports = class MaterialController {
         });
 
         // to populate subject as well
-        const newVideo = await Material.findById(material._id)
+        const newMaterial = await Material.findById(material._id)
             .populate('subject').populate('batch');
 
         return res.json({
             message: "Material added!",
-            video: new MaterialResource(newVideo)
+            material: new MaterialResource(newMaterial)
         });
     }
 
