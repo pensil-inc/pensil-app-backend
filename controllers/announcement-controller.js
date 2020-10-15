@@ -5,6 +5,26 @@ const Batch = require("../models/batch");
 const AnnouncementNotification = require("../notifications/announcement-notification");
 
 module.exports = class AnnouncementController {
+    // List all announcement by batch Id
+    static async listByBatch(req, res) {
+        const { batchId } = req.params;
+
+        const batch = await Batch.findById(batchId);
+
+        if (!batch) {
+            return ResponseHelper.validationResponse(res, {
+                batchId: ["Invalid Batch Id!"]
+            })
+        }
+
+        const announcements = await Announcement.find({
+            owner: req.user.id,
+            batch: batch._id
+        }).populate('answers.student')
+            .populate('batch');
+
+        return res.json({ announcements });
+    }
     /**
      * List Announcements
      * @param {*} req 

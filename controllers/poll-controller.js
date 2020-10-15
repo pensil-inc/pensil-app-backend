@@ -2,8 +2,29 @@ const Poll = require("../models/poll");
 const Mongoose = require("mongoose");
 const PollNotification = require("../notifications/poll-notification");
 const PollResource = require("../resources/poll-resource");
+const Batch = require("../models/batch");
 
 module.exports = class PollController {
+    // List all polls by batch Id
+    static async listByBatch(req, res) {
+        const { batchId } = req.params;
+
+        const batch = await Batch.findById(batchId);
+
+        if (!batch) {
+            return ResponseHelper.validationResponse(res, {
+                batchId: ["Invalid Batch Id!"]
+            })
+        }
+
+        const polls = await Poll.find({
+            owner: req.user.id,
+            batch: batch._id
+        }).populate('answers.student')
+            .populate('batch');
+
+        return res.json({ polls: new PollResource(polls) });
+    }
     /**
      * List Polls by me
      * @param {*} req 

@@ -41,6 +41,7 @@ router.get('/batch/:id', AuthMiddleware, BatchController.details);
 
 // Announcements
 router.get('/announcement', AuthMiddleware, AnnouncementController.index);
+router.get('/batch/:batchId/announcement', AuthMiddleware, AnnouncementController.listByBatch);
 router.post('/announcement', AuthMiddleware, CreateAnnouncementValidator.middleware, AnnouncementController.create);
 router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete);
 
