@@ -84,8 +84,6 @@ module.exports = class StudentPollController {
             }
         }, { new: true })
 
-        console.log({ poll })
-
 
         return res.json({
             message: "Voted successfully",
