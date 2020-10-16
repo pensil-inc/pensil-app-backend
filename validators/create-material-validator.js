@@ -11,7 +11,7 @@ class CreateMaterialValidator extends Validator {
             description: "string",
             batchId: "mongoid|required",
             subject: "string|required",
-            fileUrl: "string",
+            fileUrl: "url",
             isPrivate: "boolean",
         };
 

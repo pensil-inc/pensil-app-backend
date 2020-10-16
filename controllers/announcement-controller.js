@@ -19,7 +19,7 @@ module.exports = class AnnouncementController {
 
         const announcements = await Announcement.find({
             owner: req.user.id,
-            batch: batch._id
+            batches: batch._id
         }).populate('answers.student')
             .populate('batch');
 
