@@ -17,6 +17,10 @@ const Schema = new mongoose.Schema(
             type: mongoose.Types.ObjectId,
             ref: "Subject"
         },
+        fileUrl: {
+            required: false,
+            type: String,
+        },
         file: {
             required: false,
             type: String,

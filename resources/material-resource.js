@@ -10,6 +10,7 @@ module.exports = class MaterialResource extends Resource {
             subject: resource.subject.name,
             batch: resource.batch ? resource.batch._id : null,
             description: resource.description,
+            fileUrl: resource.fileUrl,
             file: resource.file ? storage.getMaterialLink(resource.file) : null,
             fileType: resource.fileType,
             fileUploadedOn: resource.fileUploadedOn,
