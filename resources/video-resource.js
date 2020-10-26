@@ -1,3 +1,4 @@
+const storage = require('../config/storage');
 const Resource = require('./resource');
 
 module.exports = class VideoResource extends Resource {
@@ -12,6 +13,8 @@ module.exports = class VideoResource extends Resource {
             duration: resource.duration,
             thumbnailUrl: resource.thumbnailUrl,
             videoUrl: resource.videoUrl,
+            video: resource.video ? storage.getVideoLink(resource.video) : null,
+            fileUploadedOn: resource.fileUploadedOn,
             isPrivate: resource.isPrivate,
             quality: resource.quality,
             createdAt: resource.createdAt,

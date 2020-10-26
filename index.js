@@ -84,7 +84,11 @@ app.use('/', routerProvider);
  * default path
  */
 app.use("*", (req, res) => {
-  res.status(404).json({ message: "You might be lost!" });
+  if(req.headers.accept === "application/json") {
+    res.status(404).json({ message: "Not found!" });
+  } else {
+    res.status(404).send("Not found!");
+  }
 });
 
 app.use(require('./config/errorhandler'));

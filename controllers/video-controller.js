@@ -1,9 +1,13 @@
 const Mongoose = require("mongoose");
+const storage = require("../config/storage");
 const ResponseHelper = require("../helpers/response_helper");
 const Batch = require("../models/batch");
 const Subject = require("../models/subject");
 const Video = require("../models/video");
 const VideoResource = require("../resources/video-resource");
+const moment = require('moment');
+const { v4: uuid } = require('uuid');
+const { promises: fs } = require('fs');
 
 module.exports = class VideoController {
     // List all videos
@@ -121,6 +125,53 @@ module.exports = class VideoController {
             message: "Video updated!",
             video: new VideoResource(updatedVideo)
         });
+    }
+
+
+    // upload file to material
+    static async updateVideo(req, res) {
+        const { id } = req.params;
+
+        const { file } = req.files;
+
+        if (!Mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        const video = await Video.findById(id);
+
+        // if not found, return error
+        if (!video) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        // get file content
+        const { data, mimetype, name, size } = file;
+
+        const fileName = uuid() + "." + name.split(".").pop();
+
+        // check for previous saved file and delete it
+        if (video.video) {
+            try {
+                await fs.unlink(storage.getVideoPath(video.video));
+            } catch (error) {
+                console.info("Older file " + video.video + " not deleted!");
+            }
+        }
+
+        // save file
+        await fs.writeFile(storage.getVideoPath(fileName), data);
+
+        // save file info
+        video.video = fileName;
+        video.fileUploadedOn = moment().toISOString();
+        await video.save();
+
+        return res.json({ video: new VideoResource(video) });
     }
 
     // delete video

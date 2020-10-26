@@ -67,13 +67,17 @@ const AppConfig = require('./app');
 
 const storagePath = path.join(process.cwd(), "public");
 const materialPath = path.join(storagePath, 'materials')
+const videoPath = path.join(storagePath, 'videos')
 module.exports = {
     storageDir: 'public',
     storagePath,
     materialPath,
+    videoPath,
     getRelativePath: (...paths) => path.join(...paths),
     getFilePath: (...paths) => path.join(storagePath, ...paths),
     getMaterialPath: (...paths) => path.join(storagePath, "materials", ...paths),
+    getVideoPath: (...paths) => path.join(storagePath, "videos", ...paths),
     getFileLink: name => AppConfig.app_url + name,
     getMaterialLink: name => AppConfig.app_url + "/materials/" + name,
+    getVideoLink: name => AppConfig.app_url + "/video/" + name,
 }

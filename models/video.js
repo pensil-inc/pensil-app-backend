@@ -26,6 +26,14 @@ const Schema = new mongoose.Schema(
             type: String
         },
         videoUrl: String,
+        video: {
+            required: false,
+            type: String,
+        },
+        fileUploadedOn: {
+            required: false,
+            type: String
+        },
         quality: {
             required: false,
             type: String,
