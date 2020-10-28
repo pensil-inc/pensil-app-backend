@@ -1,14 +1,16 @@
-const PollAnswerResource = require('./poll-answer-resource');
+const AnswerResource = require('./poll-answer-resource');
 const Resource = require('./resource');
 
-module.exports = class PollResource extends Resource {
+module.exports = class AssignmentResource extends Resource {
 
     format(resource) {
+        return resource;
+        // TODO: FIX IT
 
-        // get poll answers
+        // get assignment answers
         const answers = resource.answers.map(answer => answer.option);
 
-        // get poll options
+        // get assignment options
         const { options } = resource;
 
         // initialize a every option percentage to 0
@@ -43,7 +45,7 @@ module.exports = class PollResource extends Resource {
             endTime: resource.endTime,
             batches: resource.batches,
             isForAll: true,
-            answers: new PollAnswerResource(resource.answers),
+            answers: new AnswerResource(resource.answers),
             totalVotes: totalAnswers,
             votes,
             createdAt: resource.createdAt,

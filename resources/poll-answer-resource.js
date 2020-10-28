@@ -1,6 +1,6 @@
 const Resource = require('./resource');
 
-module.exports = class AnswerResource extends Resource {
+module.exports = class PollAnswerResource extends Resource {
 
     format(resource) {
         return {

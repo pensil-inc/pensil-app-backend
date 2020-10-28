@@ -7,6 +7,7 @@ const express = require("express");
 const router = express.Router();
 const storage = require("../config/storage");
 const AnnouncementController = require("../controllers/announcement-controller");
+const AssignmentController = require("../controllers/assignment-controller");
 const AuthenticationController = require("../controllers/authentication-controller");
 const BatchController = require("../controllers/batch-controller");
 const MaterialController = require("../controllers/material-controller");
@@ -27,6 +28,7 @@ const CreateAnnouncementValidator = require("../validators/create-announcement-v
 const CreateVideoValidator = require("../validators/create-video-validator");
 const PollVoteValidator = require("../validators/poll-vote-validator");
 const CreatePollValidator = require("../validators/poll/create-poll-validator");
+const StudentAssignmentController = require("../controllers/student/student-assignment-controller");
 
 // Authentication Routes
 router.post('/register', RegisterValidator.middleware, AuthenticationController.register);
@@ -49,6 +51,10 @@ router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete
 router.get('/poll', AuthMiddleware, PollController.index);
 router.post('/poll', AuthMiddleware, CreatePollValidator.middleware, PollController.create);
 router.delete('/poll/:id', AuthMiddleware, PollController.delete);
+
+// Assignments
+router.get('/batch/:batchId/assignment', AuthMiddleware, AssignmentController.listByBatch);
+router.post('/batch/:batchId/assignment/import', AuthMiddleware, AssignmentController.import);
 
 // Videos
 router.get('/batch/:batchId/video', AuthMiddleware, VideoController.index);
@@ -76,8 +82,12 @@ router.use('/student', AuthMiddleware, (function () {
     router.get('/my-batches', StudentBatchController.index);
     router.get('/my-announcements', StudentAnnouncementController.index);
     router.get('/my-notifications', StudentNotificationController.index);
+    router.get('/batch/:batchId/assignment', StudentAssignmentController.listByBatch);
+    router.get('/batch/:batchId/assignment/:assignmentId', StudentAssignmentController.detailByBatch);
     router.get('/my-polls', StudentPollController.index);
     router.post('/poll/:id/vote', PollVoteValidator.middleware, StudentPollController.vote);
+
+    router.get('/')
 
     return router;
 })());
