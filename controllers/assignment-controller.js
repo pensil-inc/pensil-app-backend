@@ -5,6 +5,7 @@ const Batch = require("../models/batch");
 const ResponseHelper = require("../helpers/response_helper");
 const { Readable } = require('stream');
 const AssignmentListResource = require("../resources/assignment-list-resource");
+const csvParser = require("csv-parser");
 
 module.exports = class AssignmentController {
     // List all assignments by batch Id
@@ -22,7 +23,7 @@ module.exports = class AssignmentController {
         const assignments = await Assignment.find({
             owner: req.user.id,
             batch: batch._id
-        }).populate('batch');
+        });
 
         return res.json({ assignments: new AssignmentListResource(assignments) });
     }
@@ -54,12 +55,25 @@ module.exports = class AssignmentController {
         try {
 
             const { batchId } = req.params;
+            const {title, duration} = req.body;
 
             const batch = await Batch.findById(batchId);
 
             if (!batch) {
                 return ResponseHelper.validationResponse(res, {
                     batchId: ["Invalid Batch Id!"]
+                })
+            }
+
+            if (!title) {
+                return ResponseHelper.validationResponse(res, {
+                    title: ["Title required!"]
+                })
+            }
+
+            if (!duration) {
+                return ResponseHelper.validationResponse(res, {
+                    duration: ["Duration required!"]
                 })
             }
 
@@ -84,39 +98,86 @@ module.exports = class AssignmentController {
                 });
             }
 
-            let [extraInfo, headers, ...questions] = data.toString().split("\n");
-
-            // parse extraInfo
-            let [title, duration] = extraInfo.split(",");
-            duration = parseInt(duration)
-
-            // parse questions
-            questions = questions.map(q => {
-                const [statement, option1, option2, option3, option4, answer] = q.split(",");
-                return {
-                    statement: statement.trim(),
-                    options: [
-                        option1.trim(),
-                        option2.trim(),
-                        option3.trim(),
-                        option4.trim()
-                    ],
-                    answer: answer.trim()
-                };
+            const readableInstanceStream = new Readable({
+                read() {
+                    this.push(data);
+                    this.push(null);
+                }
             });
 
-            // try to create assigment
-            const assigment = await Assignment.create({
-                title,
-                duration,
-                owner: req.user._id,
-                batch: batch._id,
-                questions,
-                answers: []
-            });
+            const questions = [];
 
-            // return response
-            return res.json({ assigment });
+            readableInstanceStream.pipe(csvParser())
+                .on('data', (data) => {
+                    const { question: statement, option1, option2, option3, option4, answer } = data;
+                    // push formatted question on questions list
+                    questions.push({
+                        statement: statement.trim(),
+                        options: [
+                            option1.trim(),
+                            option2.trim(),
+                            option3.trim(),
+                            option4.trim()
+                        ],
+                        answer: answer.trim()
+                    });
+                })
+                .on('end',async () => {
+                    // we have questions, lets save them
+
+
+                    // try to create assigment
+                    const assigment = await Assignment.create({
+                        title,
+                        duration,
+                        owner: req.user._id,
+                        batch: batch._id,
+                        questions,
+                        answers: []
+                    });
+
+                    // return response
+                    return res.json({ assigment });
+                })
+                .on('error', () => {
+                    return ResponseHelper.response500(res);
+                });
+
+            //     return res.json({ data }); // redo everything
+
+            //     let [extraInfo, headers, ...questions] = data.toString().split("\n");
+
+            //     // parse extraInfo
+            //     let [title, duration] = extraInfo.split(",");
+            //     duration = parseInt(duration)
+
+            //     // parse questions
+            //     questions = questions.map(q => {
+            //         const [statement, option1, option2, option3, option4, answer] = q.split(",");
+            //         return {
+            //             statement: statement.trim(),
+            //             options: [
+            //                 option1.trim(),
+            //                 option2.trim(),
+            //                 option3.trim(),
+            //                 option4.trim()
+            //             ],
+            //             answer: answer.trim()
+            //         };
+            //     });
+
+            //     // try to create assigment
+            //     const assigment = await Assignment.create({
+            //         title,
+            //         duration,
+            //         owner: req.user._id,
+            //         batch: batch._id,
+            //         questions,
+            //         answers: []
+            //     });
+
+            //     // return response
+            //     return res.json({ assigment });
         } catch (error) {
             console.error(error);
             return ResponseHelper.response500(res);
