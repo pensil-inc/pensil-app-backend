@@ -130,48 +130,54 @@ module.exports = class VideoController {
 
     // upload file to material
     static async updateVideo(req, res) {
-        const { id } = req.params;
+        try {
 
-        const { file } = req.files;
+            const { id } = req.params;
 
-        if (!Mongoose.isValidObjectId(id)) {
-            return res.status(404).json({
-                message: "Resource with specific id not found"
-            });
-        }
+            const { file } = req.files;
 
-        const video = await Video.findById(id);
-
-        // if not found, return error
-        if (!video) {
-            return res.status(404).json({
-                message: "Resource with specific id not found"
-            });
-        }
-
-        // get file content
-        const { data, mimetype, name, size } = file;
-
-        const fileName = uuid() + "." + name.split(".").pop();
-
-        // check for previous saved file and delete it
-        if (video.video) {
-            try {
-                await fs.unlink(storage.getVideoPath(video.video));
-            } catch (error) {
-                console.info("Older file " + video.video + " not deleted!");
+            if (!Mongoose.isValidObjectId(id)) {
+                return res.status(404).json({
+                    message: "Resource with specific id not found"
+                });
             }
+
+            const video = await Video.findById(id);
+
+            // if not found, return error
+            if (!video) {
+                return res.status(404).json({
+                    message: "Resource with specific id not found"
+                });
+            }
+
+            // get file content
+            const { data, mimetype, name, size } = file;
+
+            const fileName = uuid() + "." + name.split(".").pop();
+
+            // check for previous saved file and delete it
+            if (video.video) {
+                try {
+                    await fs.unlink(storage.getVideoPath(video.video));
+                } catch (error) {
+                    console.info("Older file " + video.video + " not deleted!");
+                }
+            }
+
+            // save file
+            await fs.writeFile(storage.getVideoPath(fileName), data);
+
+            // save file info
+            video.video = fileName;
+            video.fileUploadedOn = moment().toISOString();
+            await video.save();
+
+            return res.json({ video: new VideoResource(video) });
+        } catch (error) {
+            console.error(error);
+            return ResponseHelper.response500(res);
         }
-
-        // save file
-        await fs.writeFile(storage.getVideoPath(fileName), data);
-
-        // save file info
-        video.video = fileName;
-        video.fileUploadedOn = moment().toISOString();
-        await video.save();
-
-        return res.json({ video: new VideoResource(video) });
     }
 
     // delete video
