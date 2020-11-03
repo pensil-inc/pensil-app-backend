@@ -7,3 +7,4 @@ public/uploads/files/*
 .env
 storage/*
 tmp
+.idea

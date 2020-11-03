@@ -15,6 +15,7 @@
   "license": "ISC",
   "homepage": "",
   "dependencies": {
+    "aws-sdk": "^2.783.0",
     "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "csv-parser": "^2.3.3",

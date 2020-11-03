@@ -8,6 +8,7 @@ const VideoResource = require("../resources/video-resource");
 const moment = require('moment');
 const { v4: uuid } = require('uuid');
 const { promises: fs } = require('fs');
+const S3Storage = require("../config/s3");
 
 module.exports = class VideoController {
     // List all videos
@@ -150,26 +151,39 @@ module.exports = class VideoController {
                     message: "Resource with specific id not found"
                 });
             }
+            // create storage instance
+            const s3 = new S3Storage();
 
             // get file content
-            const { data, mimetype, name, size } = file;
+            const { data, mimetype, name, size, tempFilePath } = file;
 
             const fileName = uuid() + "." + name.split(".").pop();
 
             // check for previous saved file and delete it
             if (video.video) {
                 try {
-                    await fs.unlink(storage.getVideoPath(video.video));
+                    // delete video from s3
+                    const oldFileName = video.video.replace(process.env.AWS_S3_BASE_URL, "");
+                    await s3.delete(oldFileName);
+                    console.log("Old file deleted!");
+                    // await fs.unlink(storage.getVideoPath());
                 } catch (error) {
+                    console.error(error);
                     console.info("Older file " + video.video + " not deleted!");
                 }
             }
 
-            // save file
-            await fs.writeFile(storage.getVideoPath(fileName), data);
+            // upload file to 
+            console.info("Starting s3 upload for file!");
+            const s3response = await s3.upload('videos/' + fileName, await fs.readFile(tempFilePath));
+            console.info("s3 upload complete!");
+            // unlink temp file
+            console.info("deleting temp file!");
+            await fs.unlink(tempFilePath);
+            console.info("temp file deleted!");
 
             // save file info
-            video.video = fileName;
+            video.video = s3response.Location;
             video.fileUploadedOn = moment().toISOString();
             await video.save();
 

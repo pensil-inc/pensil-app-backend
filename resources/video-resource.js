@@ -13,7 +13,7 @@ module.exports = class VideoResource extends Resource {
             duration: resource.duration,
             thumbnailUrl: resource.thumbnailUrl,
             videoUrl: resource.videoUrl,
-            video: resource.video ? storage.getVideoLink(resource.video) : null,
+            video: resource.video,
             fileUploadedOn: resource.fileUploadedOn,
             isPrivate: resource.isPrivate,
             quality: resource.quality,
