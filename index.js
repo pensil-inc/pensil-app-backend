@@ -11,14 +11,14 @@ const cors = require('cors');
 const logger = require('morgan');
 
 /**
+ * Read from dotenv
+ */
+env.config()
+
+/**
  * Import all routers
  */
 const routerProvider = require('./config/routes');
-
-/**
- * Read from dotenv
- */
-env.config();
 
 /**
  * Enable global helpers
@@ -70,7 +70,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload({
   useTempFiles: true,
-  debug: true
+  debug: process.env.APP_ENV === "development"
 }));
 
 /**
