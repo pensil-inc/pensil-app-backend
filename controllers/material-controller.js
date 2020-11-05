@@ -105,7 +105,7 @@ module.exports = class MaterialController {
         }
 
         // save file
-        await fs.writeFile(storage.getMaterialPath(fileName), data);
+        await fs.writeFile(storage.getMaterialPath(fileName), await fs.readFile(tempFilePath));
 
         // save file info
         material.file = fileName;
