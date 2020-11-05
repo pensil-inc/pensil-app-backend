@@ -1,25 +1,29 @@
 'use strict';
 
-const db = require('mongoose');
+function initDatabase() {
 
-const DB_URI = process.env.NODE_ENV === "test"
-    ? process.env.MONGODB_URI_TEST
-    : process.env.MONGODB_URI;
+    const db = require('mongoose');
 
-db.connect(
-    DB_URI,
-    { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(_ => {
-        if (process.env.APP_ENV === "development") {
-            console.info('connected to mongodb');
-        }
-    })
-    .catch(error => {
-        if (error) {
-            console.log('could not connect to mongo db -', error);
-        }
-    });
+    const DB_URI = process.env.NODE_ENV === "test"
+        ? process.env.MONGODB_URI_TEST
+        : process.env.MONGODB_URI;
 
-db.set('useFindAndModify', false);
+    db.connect(
+        DB_URI,
+        { useNewUrlParser: true, useUnifiedTopology: true })
+        .then(_ => {
+            if (process.env.APP_ENV === "development") {
+                console.info('connected to mongodb');
+            }
+        })
+        .catch(error => {
+            if (error) {
+                console.log('could not connect to mongo db -', error);
+            }
+        });
 
-module.exports = db;
+    db.set('useFindAndModify', false);
+    return db;
+}
+
+module.exports = initDatabase();
