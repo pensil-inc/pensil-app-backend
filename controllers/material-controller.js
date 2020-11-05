@@ -91,7 +91,7 @@ module.exports = class MaterialController {
         }
 
         // get file content
-        const { data, mimetype, name, size } = file;
+        const { data, mimetype, name, size, tempFilePath } = file;
 
         const fileName = uuid() + "." + name.split(".").pop();
 
