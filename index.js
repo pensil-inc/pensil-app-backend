@@ -28,7 +28,7 @@ require('./config/global');
 /**
  * Initialize the database
  */
-const db = require("./config/database");
+const db = require("./config/database")();
 
 /**
  * Enable cron

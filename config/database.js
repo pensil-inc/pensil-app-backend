@@ -26,4 +26,4 @@ function initDatabase() {
     return db;
 }
 
-module.exports = initDatabase();
+module.exports = initDatabase;
