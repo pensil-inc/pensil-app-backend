@@ -6,6 +6,7 @@ const ResponseHelper = require("../helpers/response_helper");
 const { Readable } = require('stream');
 const AssignmentListResource = require("../resources/assignment-list-resource");
 const csvParser = require("csv-parser");
+const { promises: fs } = require('fs');
 
 module.exports = class AssignmentController {
     // List all assignments by batch Id
@@ -88,7 +89,7 @@ module.exports = class AssignmentController {
             }
 
             // get file content
-            const { data, mimetype, name, size } = sheet;
+            const { mimetype, name, size, tempFilePath } = sheet;
 
             if (mimetype !== "text/csv") {
                 return ResponseHelper.validationResponse(res, {
@@ -97,6 +98,8 @@ module.exports = class AssignmentController {
                     ]
                 });
             }
+
+            const data = await fs.readFile(tempFilePath);
 
             const readableInstanceStream = new Readable({
                 read() {
