@@ -7,6 +7,6 @@ module.exports = class StudentBatchController {
         const batches = await Batch.find({
             students: req.user.id
         }).populate('subject').populate('students');
-        return res.json(new BatchWithStudentResource(batches));
+        return res.json({ batches: new BatchWithStudentResource(batches)});
      }
 };
