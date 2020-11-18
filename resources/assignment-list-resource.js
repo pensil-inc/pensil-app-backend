@@ -9,7 +9,8 @@ module.exports = class AssignmentListResource extends Resource {
             title: resource.title,
             duration: resource.duration,
             owner: resource.owner,
-            questions: resource.questions ? resource.questions.length : 0
+            questions: resource.questions ? resource.questions.length : 0,
+            created_at: resource.created_at
         };
     }
 

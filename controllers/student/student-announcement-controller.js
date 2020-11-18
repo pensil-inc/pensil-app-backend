@@ -1,5 +1,6 @@
 const Announcement = require("../../models/announcement");
 const Batch = require("../../models/batch");
+const AnnouncementResource = require("../../resources/announcement-resource");
 
 module.exports = class StudentAnnouncementController {
     /**
@@ -19,7 +20,8 @@ module.exports = class StudentAnnouncementController {
                 { isForAll: true },
                 { batches: { $in: batches } }
             ]
-        });
-        return res.json({ count: announcements.length, announcements })
+        }).populate('owner');
+
+        return res.json({ count: announcements.length, announcements: new AnnouncementResource(announcements) })
     }
 };

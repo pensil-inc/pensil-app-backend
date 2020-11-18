@@ -122,10 +122,10 @@ module.exports = class BatchController {
         }
 
         // get announcements
-        batch.announcements = await Announcement.find({batches: batch._id});
+        batch.announcements = await Announcement.find({ batches: batch._id });
 
         // get videos
-        batch.videos = await Video.find({batch: batch._id});
+        batch.videos = await Video.find({ batch: batch._id });
 
         // get materials
         batch.materials = await Material.find({ batch: batch._id });
@@ -140,7 +140,40 @@ module.exports = class BatchController {
 
     static update(req, res) { }
 
-    static delete(req, res) { }
+    /**
+     * Delete the batch
+     * @param {*} req 
+     * @param {*} res 
+     */
+    static async delete(req, res) {
+
+        const { id } = req.params;
+
+        // if invalid id, return error
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        // get batch
+        const batch = await (await Batch.findById(id).populate('students').populate('subject'));
+
+        // if batch not found, return 404
+        if (!batch) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        await batch.remove();
+
+        // return batch details
+        return res.json({
+            message: "Batch Deleted",
+            batch: new BatchWithStudentResource(batch)
+        });
+    }
 };
 
 
