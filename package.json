@@ -5,7 +5,8 @@
   "main": "bin/www",
   "scripts": {
     "test": "mocha --exit",
-    "start": "node bin/www"
+    "start": "node bin/www",
+    "deploy": "deploy.bat"
   },
   "repository": {
     "type": "git",

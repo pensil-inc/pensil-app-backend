@@ -1,0 +1,24 @@
+# Change the dir to desired
+cd /var/www/pensil-backend/
+
+# Start the deployement
+echo "--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo [$(date)] "Starting the deployment!"
+echo "--------------------------------------------------------------------------"
+
+echo "Pulling the latest changes from [master]..."
+echo ""
+
+git pull
+
+echo ""
+echo "Pull complete! Please see above for the status!"
+
+echo "--------------------------------------------------------------------------"
+echo "Ending the deployment!" 
+echo "--------------------------------------------------------------------------"
+# end of script
+echo ""
+echo ""
+exit

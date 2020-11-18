@@ -1,0 +1,1 @@
+plink -ssh -batch  -i putty-pensil.ppk ubuntu@34.222.54.250 -m deploy-steps.txt >> deploy.log

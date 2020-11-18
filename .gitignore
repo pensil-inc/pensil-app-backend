@@ -8,3 +8,5 @@ public/uploads/files/*
 storage/*
 tmp
 .idea
+deploy.log
+putty-pensil.ppk
