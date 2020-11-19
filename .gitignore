@@ -5,6 +5,7 @@ public/uploads/images/*
 !public/uploads/files
 public/uploads/files/*
 .env
+.env.testing
 storage/*
 tmp
 .idea

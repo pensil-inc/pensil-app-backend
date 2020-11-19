@@ -138,7 +138,88 @@ module.exports = class BatchController {
 
     }
 
-    static update(req, res) { }
+    static async update(req, res) {
+
+        const { id } = req.params;
+
+        // if invalid id, return error
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        const batch = await Batch.findById(id);
+
+        const {
+            name,
+            description,
+            startTime,
+            subject,
+            endTime,
+            students,
+            classes
+        } = req.body;
+
+        // update/add subjects if needed
+        let sub = await Subject.findOne({
+            name: subject
+        });
+
+        if (!sub) {
+            sub = await Subject.create({
+                name: subject,
+                createdBy: req.user.id
+            });
+        }
+
+        // check for all the students (if they are in the db)
+        await Promise.all(students.map(async (student, i) => {
+            // find the student with mobile no
+            let s = await User.findOne({
+                mobile: student
+            });
+            // if not available, invite him/her
+            if (!s) {
+                s = await MainHelper.sendInviteToMobile(students[i])
+            }
+
+            students[i] = s._id;
+        }));
+
+        // check if class timings okay
+        const invalidClasses = classes.map(timing => {
+            const startTime = parseInt(timing.startTime.replace(/:/g, ""));
+            const endTime = parseInt(timing.endTime.replace(/:/g, ""));
+            if (startTime >= endTime || endTime > 2400) {
+                return getDayOfWeek(timing.dayOfWeek) + " " + timing.startTime + "-" + timing.endTime + " is invalid timing!";
+            } else {
+                return false;
+            }
+        }).filter(e => e);
+
+        // check if students missing
+        if (invalidClasses.length > 0) {
+            return ResponseHelper.validationResponse(res, {
+                classes: invalidClasses
+            });
+        }
+
+        // everything good, edit the batch
+        batch.name = name;
+        batch.description = description;
+        batch.subject = sub._id;
+        batch.owner = req.user._id;
+        batch.startTime = startTime;
+        batch.endTime = endTime;
+        batch.classes = classes;
+        batch.students = students;
+
+        // save the batch
+        await batch.save();
+
+        return res.json({ batch });
+     }
 
     /**
      * Delete the batch

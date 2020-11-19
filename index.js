@@ -13,7 +13,13 @@ const logger = require('morgan');
 /**
  * Read from dotenv
  */
-env.config()
+env.config({
+  path: process.env.NODE_ENV === "test"
+    ? path.resolve(process.cwd(), '.env.testing')
+    : path.resolve(process.cwd(), '.env')
+})
+
+console.log("Starting in " + process.env.APP_ENV + " mode!");
 
 /**
  * Import all routers
@@ -87,7 +93,7 @@ app.use('/', routerProvider);
  * default path
  */
 app.use("*", (req, res) => {
-  if(req.headers.accept === "application/json") {
+  if (req.headers.accept === "application/json") {
     res.status(404).json({ message: "Not found!" });
   } else {
     res.status(404).send("Not found!");

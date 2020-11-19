@@ -10,6 +10,8 @@ module.exports = class SMS {
      * Initialize the client and send the message
      */
     async send() {
+        if (process.env.APP_ENV === "test") return;
+
         const client = new twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
         return client.messages.create({
             body: this.body,

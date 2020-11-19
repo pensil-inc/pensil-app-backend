@@ -5,7 +5,7 @@
   "main": "bin/www",
   "scripts": {
     "test": "mocha --exit",
-    "start": "node bin/www",
+    "start": "nodemon bin/www",
     "deploy": "deploy.bat"
   },
   "repository": {
@@ -44,6 +44,7 @@
     "enquirer": "^2.3.6",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "nodemon": "^2.0.6",
     "mocha": "^8.1.3"
   }
 }
