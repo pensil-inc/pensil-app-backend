@@ -8,6 +8,7 @@ const Schema = new mongoose.Schema(
             required: false,
             ref: 'User'
         },
+        image: String,
         isForAll: Boolean,
         batches: [{
             type: mongoose.Types.ObjectId,

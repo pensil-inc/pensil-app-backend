@@ -1,4 +1,5 @@
 const Resource = require('./resource');
+const storage = require('../config/storage');
 
 module.exports = class AnnouncementResource extends Resource {
 
@@ -6,6 +7,7 @@ module.exports = class AnnouncementResource extends Resource {
         return {
             batches: resource.batches,
             description: resource.description,
+            image: resource.image ? storage.getAnnouncementLink(resource.image) : null,
             isForAll: resource.isForAll,
             owner: {
                 id: resource.owner._id,

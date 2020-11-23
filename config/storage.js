@@ -76,8 +76,10 @@ module.exports = {
     getRelativePath: (...paths) => path.join(...paths),
     getFilePath: (...paths) => path.join(storagePath, ...paths),
     getMaterialPath: (...paths) => path.join(storagePath, "materials", ...paths),
+    getAnnouncementPath: (...paths) => path.join(storagePath, "announcements", ...paths),
     getVideoPath: (...paths) => path.join(storagePath, "videos", ...paths),
     getFileLink: name => AppConfig.app_url + name,
+    getAnnouncementLink: name => AppConfig.app_url + "/announcements/" + name,
     getMaterialLink: name => AppConfig.app_url + "/materials/" + name,
     getVideoLink: name => AppConfig.app_url + "/video/" + name,
 }

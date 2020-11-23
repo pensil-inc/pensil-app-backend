@@ -73,6 +73,11 @@ module.exports = class MaterialController {
     static async updateMaterial(req, res) {
         const { id } = req.params;
 
+        // Check if file uploaded
+        if (!req.files) {
+            return ResponseHelper.validationResponse(res, { file: ["File is required!"] });
+        }
+
         const { file } = req.files;
 
         if (!Mongoose.isValidObjectId(id)) {
@@ -88,6 +93,12 @@ module.exports = class MaterialController {
             return res.status(404).json({
                 message: "Resource with specific id not found"
             });
+        }
+
+
+        // Check if file uploaded
+        if (!file) {
+            return ResponseHelper.validationResponse(res, { file: ["File is required!"] });
         }
 
         // get file content

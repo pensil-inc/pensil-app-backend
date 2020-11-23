@@ -3,6 +3,10 @@ const ResponseHelper = require("../helpers/response_helper");
 const Announcement = require("../models/announcement");
 const Batch = require("../models/batch");
 const AnnouncementNotification = require("../notifications/announcement-notification");
+const { v4: uuid } = require('uuid');
+const { promises: fs } = require('fs');
+const storage = require("../config/storage");
+const AnnouncementResource = require("../resources/announcement-resource");
 
 module.exports = class AnnouncementController {
     // List all announcement by batch Id
@@ -32,7 +36,8 @@ module.exports = class AnnouncementController {
      */
     static async index(req, res) {
         const announcements = await Announcement.find({ owner: req.user.id });
-        return res.json({ announcements })
+
+        return res.json({ announcements: new AnnouncementResource(announcements) });
     }
 
     /**
@@ -80,7 +85,63 @@ module.exports = class AnnouncementController {
             AnnouncementNotification.toBatches(batches, announcement);
         }
 
-        return res.json({ announcement });
+
+        return res.json({ announcement: new AnnouncementResource(announcement) });
+    }
+
+    static async updateImage(req, res) {
+        const { id } = req.params;
+
+        // Check if file uploaded
+        if (!req.files) {
+            return ResponseHelper.validationResponse(res, { image: ["File is required!"] });
+        }
+
+        const { image } = req.files;
+
+        if (!Mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+
+        // Check if file uploaded
+        if (!image) {
+            return ResponseHelper.validationResponse(res, { image: ["File is required!"] });
+        }
+
+        const announcement = await Announcement.findById(id);
+
+        if (!announcement) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        // get file content
+        const { data, mimetype, name, size, tempFilePath } = image;
+
+        const fileName = uuid() + "." + name.split(".").pop();
+
+        // check for previous saved file and delete it
+        if (announcement.image) {
+            try {
+                await fs.unlink(storage.getAnnouncementPath(material.file));
+            } catch (error) {
+                console.info("Older file " + announcement.image + " not deleted!");
+            }
+        }
+
+        // save file
+        await fs.writeFile(storage.getAnnouncementPath(fileName), await fs.readFile(tempFilePath));
+
+        announcement.image = fileName;
+
+        await announcement.save();
+
+        return res.json({ announcement: new AnnouncementResource(announcement) });
+
     }
 
     static async delete(req, res) {
@@ -107,7 +168,7 @@ module.exports = class AnnouncementController {
 
         return res.json({
             message: "Announcement deleted!",
-            announcement
+            announcement: new AnnouncementResource(announcement)
         })
 
     }
