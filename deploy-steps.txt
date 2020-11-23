@@ -14,6 +14,12 @@ git pull
 
 echo ""
 echo "Pull complete! Please see above for the status!"
+echo ""
+echo "Refreshing the app!"
+echo ""
+pm2 restart all
+echo ""
+echo "Refreshing app complete, please see above for the status!"
 
 echo "--------------------------------------------------------------------------"
 echo "Ending the deployment!" 
