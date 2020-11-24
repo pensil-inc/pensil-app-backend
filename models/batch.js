@@ -8,6 +8,7 @@ const Schema = new mongoose.Schema(
             ref: "User",
             required: true
         },
+        description: String,
         classes: [{
             dayOfWeek: Number,
             startTime: String,

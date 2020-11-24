@@ -7,6 +7,7 @@ module.exports = class BatchWithStudentResource extends Resource {
         return {
             "id": resource.id,
             "name": resource.name,
+            "description": resource.description,
             "subject": resource.subject.name,
             "classes": resource.classes.map(classs => ({
                 dayOfWeek: classs.dayOfWeek,
