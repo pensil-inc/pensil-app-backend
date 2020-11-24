@@ -25,6 +25,7 @@ module.exports = class AnnouncementController {
             owner: req.user.id,
             batches: batch._id
         }).populate('answers.student')
+            .populate('owner')
             .populate('batch');
 
         return res.json({ announcements });
@@ -35,7 +36,8 @@ module.exports = class AnnouncementController {
      * @param {*} res 
      */
     static async index(req, res) {
-        const announcements = await Announcement.find({ owner: req.user.id });
+        const announcements = await Announcement.find({ owner: req.user.id })
+            .populate('owner');
 
         return res.json({ announcements: new AnnouncementResource(announcements) });
     }
