@@ -28,7 +28,7 @@ module.exports = class AnnouncementController {
             .populate('owner')
             .populate('batch');
 
-        return res.json({ announcements });
+        return res.json({ announcements: new AnnouncementResource(announcements) })
     }
     /**
      * List Announcements
