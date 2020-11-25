@@ -96,10 +96,10 @@ module.exports = class AnnouncementController {
 
         // Check if file uploaded
         if (!req.files) {
-            return ResponseHelper.validationResponse(res, { image: ["File is required!"] });
+            return ResponseHelper.validationResponse(res, { file: ["File is required!"] });
         }
 
-        const { image } = req.files;
+        const { file } = req.files;
 
         if (!Mongoose.isValidObjectId(id)) {
             return res.status(404).json({
@@ -109,8 +109,8 @@ module.exports = class AnnouncementController {
 
 
         // Check if file uploaded
-        if (!image) {
-            return ResponseHelper.validationResponse(res, { image: ["File is required!"] });
+        if (!file) {
+            return ResponseHelper.validationResponse(res, { file: ["File is required!"] });
         }
 
         const announcement = await Announcement.findById(id);
@@ -122,14 +122,14 @@ module.exports = class AnnouncementController {
         }
 
         // get file content
-        const { data, mimetype, name, size, tempFilePath } = image;
+        const { data, mimetype, name, size, tempFilePath } = file;
 
         const fileName = uuid() + "." + name.split(".").pop();
 
         // check for previous saved file and delete it
         if (announcement.image) {
             try {
-                await fs.unlink(storage.getAnnouncementPath(material.file));
+                await fs.unlink(storage.getAnnouncementPath(announcement.image));
             } catch (error) {
                 console.info("Older file " + announcement.image + " not deleted!");
             }
