@@ -21,6 +21,10 @@ module.exports = class AuthenticationController {
         let user = null;
         if (mobile) {
             user = await User.findOne({ mobile });
+            // if user not verified, remove the older user
+            if (!user.isVerified) {
+                await user.remove();
+            }
             if (user) {
                 return ResponseHelper.validationResponse(res, {
                     mobile: [
@@ -31,6 +35,10 @@ module.exports = class AuthenticationController {
         } else {
             // user registered using email
             user = await User.findOne({ email });
+            // if user not verified, remove the older user
+            if (!user.isVerified) {
+                await user.remove();
+            }
             if (user) {
                 return ResponseHelper.validationResponse(res, {
                     mobile: [
