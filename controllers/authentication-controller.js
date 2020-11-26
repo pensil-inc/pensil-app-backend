@@ -108,7 +108,12 @@ module.exports = class AuthenticationController {
             user.isVerified = true;
             user.otp = null;
             await user.save();
-            return res.json({ message: "Account activated successfully!" });
+
+            let userResource = user.toObject();
+
+            userResource.token = await jwt.sign(userResource, process.env.APP_KEY);
+
+            return res.json({ user: new UserLoginResource(userResource) });
         } else {
             // otp is invalid
             return ResponseHelper.validationResponse(res, {
