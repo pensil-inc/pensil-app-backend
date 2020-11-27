@@ -29,8 +29,11 @@ const CreateVideoValidator = require("../validators/create-video-validator");
 const PollVoteValidator = require("../validators/poll-vote-validator");
 const CreatePollValidator = require("../validators/poll/create-poll-validator");
 const StudentAssignmentController = require("../controllers/student/student-assignment-controller");
+const GoogleAuthController = require("../controllers/auth/google-auth-controller");
 
 // Authentication Routes
+router.get('/auth/google', GoogleAuthController.invoke);
+
 router.post('/register', RegisterValidator.middleware, AuthenticationController.register);
 router.post('/verify-otp', VerifyOTPValidator.middleware, AuthenticationController.verifyOTP);
 router.post('/login', LoginValidator.middleware, AuthenticationController.login);
