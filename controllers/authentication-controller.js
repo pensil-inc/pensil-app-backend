@@ -25,12 +25,13 @@ module.exports = class AuthenticationController {
             if (user) {
                 if (!user.isVerified) {
                     await user.remove();
+                } else {
+                    return ResponseHelper.validationResponse(res, {
+                        mobile: [
+                            "Mobile number already registered!"
+                        ]
+                    });
                 }
-                return ResponseHelper.validationResponse(res, {
-                    mobile: [
-                        "Mobile number already registered!"
-                    ]
-                });
             }
         } else {
             // user registered using email
@@ -39,12 +40,13 @@ module.exports = class AuthenticationController {
             if (user) {
                 if (!user.isVerified) {
                     await user.remove();
+                } else {
+                    return ResponseHelper.validationResponse(res, {
+                        mobile: [
+                            "Email address already in use!"
+                        ]
+                    });
                 }
-                return ResponseHelper.validationResponse(res, {
-                    mobile: [
-                        "Email address already in use!"
-                    ]
-                });
             }
         }
 
