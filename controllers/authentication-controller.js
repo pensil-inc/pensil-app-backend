@@ -22,10 +22,10 @@ module.exports = class AuthenticationController {
         if (mobile) {
             user = await User.findOne({ mobile });
             // if user not verified, remove the older user
-            if (!user.isVerified) {
-                await user.remove();
-            }
             if (user) {
+                if (!user.isVerified) {
+                    await user.remove();
+                }
                 return ResponseHelper.validationResponse(res, {
                     mobile: [
                         "Mobile number already registered!"
@@ -36,10 +36,10 @@ module.exports = class AuthenticationController {
             // user registered using email
             user = await User.findOne({ email });
             // if user not verified, remove the older user
-            if (!user.isVerified) {
-                await user.remove();
-            }
             if (user) {
+                if (!user.isVerified) {
+                    await user.remove();
+                }
                 return ResponseHelper.validationResponse(res, {
                     mobile: [
                         "Email address already in use!"
