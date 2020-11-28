@@ -1,3 +1,4 @@
+const ResponseHelper = require('../../helpers/response_helper');
 const OTPMail = require('../../mails/otp-mail');
 const User = require("../../models/user");
 
