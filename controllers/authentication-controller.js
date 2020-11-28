@@ -7,6 +7,7 @@ const OTPMail = require('../mails/otp-mail');
 const user = require('../models/user');
 const User = require("../models/user");
 const UserLoginResource = require('../resources/user-login-resource');
+const UserResource = require('../resources/user-resource');
 
 
 module.exports = class AuthenticationController {
@@ -161,8 +162,8 @@ module.exports = class AuthenticationController {
         }
 
         user.lastLoginDate = moment();
-    
-        if(fcmToken) {
+
+        if (fcmToken) {
             user.fcmToken = fcmToken;
         }
 
@@ -178,6 +179,28 @@ module.exports = class AuthenticationController {
     }
 
     static async profile(req, res) {
-        return res.json({ user: req.user });
+        return res.json({ user: new UserResource(req.user) });
+    }
+
+    static async profileUpdate(req, res) {
+        const values = req.body;
+
+        // get user
+        const user = req.user;
+
+        // update values from request
+        for(let value in values) {
+            if (value === "password") {
+                user[value] = await bcrypt.hash(values[value], parseInt(process.env.APP_KEY));
+            } else {
+                user[value] = values[value];
+            }
+        }
+
+        // save user
+        await user.save();
+
+        // return user
+        return res.json({ user: new UserResource(user) });
     }
 };

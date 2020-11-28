@@ -32,6 +32,7 @@ const CreatePollValidator = require("../validators/poll/create-poll-validator");
 const StudentAssignmentController = require("../controllers/student/student-assignment-controller");
 const GoogleAuthController = require("../controllers/auth/google-auth-controller");
 const ForgotPasswordController = require("../controllers/auth/forgot-password-controller");
+const profileUpdateValidator = require("../validators/auth/profile-update-validator");
 
 // Authentication Routes
 router.get('/auth/google', GoogleAuthController.invoke);
@@ -82,6 +83,7 @@ router.delete('/material/:id', AuthMiddleware, MaterialController.delete);
 // Other
 router.get('/get-all-student-list', AuthMiddleware, StudentController.list);
 router.get('/profile', AuthMiddleware, AuthenticationController.profile);
+router.post('/profile', AuthMiddleware, profileUpdateValidator.middleware, AuthenticationController.profileUpdate);
 router.get('/subjects', AuthMiddleware, SubjectController.list);
 
 // Student routes
