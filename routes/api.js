@@ -21,6 +21,7 @@ const SubjectController = require("../controllers/subject-controller");
 const VideoController = require("../controllers/video-controller");
 const AuthMiddleware = require("../middlewares/auth-middleware");
 const LoginValidator = require("../validators/auth/login-validator");
+const PasswordResetValidator = require("../validators/auth/password-reset-validator");
 const RegisterValidator = require("../validators/auth/register-validator");
 const VerifyOTPValidator = require("../validators/auth/verify-otp-validator");
 const CreateBatchValidator = require("../validators/batch/create-batch-validator");
@@ -30,9 +31,11 @@ const PollVoteValidator = require("../validators/poll-vote-validator");
 const CreatePollValidator = require("../validators/poll/create-poll-validator");
 const StudentAssignmentController = require("../controllers/student/student-assignment-controller");
 const GoogleAuthController = require("../controllers/auth/google-auth-controller");
+const ForgotPasswordController = require("../controllers/auth/forgot-password-controller");
 
 // Authentication Routes
 router.get('/auth/google', GoogleAuthController.invoke);
+router.post('/auth/reset-password', PasswordResetValidator.middleware, ForgotPasswordController.request);
 
 router.post('/register', RegisterValidator.middleware, AuthenticationController.register);
 router.post('/verify-otp', VerifyOTPValidator.middleware, AuthenticationController.verifyOTP);

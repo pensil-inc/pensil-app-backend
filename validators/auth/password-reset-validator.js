@@ -1,6 +1,6 @@
 const Validator = require('../validator');
 
-class VerifyOTPValidator extends Validator {
+class PasswordResetValidator extends Validator {
 
     constructor(data = {}, rules = {}, messages = {}) {
         /**
@@ -9,7 +9,6 @@ class VerifyOTPValidator extends Validator {
         rules = {
             mobile: "integer|required_without:email|digit:10",
             email: "email|required_without:mobile",
-            otp: "integer|required|digit:4",
         };
 
         super(data, rules, messages);
@@ -24,7 +23,7 @@ class VerifyOTPValidator extends Validator {
      * @param {express.Next} next 
      */
     static middleware(req, res, next) {
-        const validator = new VerifyOTPValidator(req.body);
+        const validator = new PasswordResetValidator(req.body);
         // check if data is valid
         if (validator.fails()) {
             // return error in case data invalid
@@ -39,4 +38,4 @@ class VerifyOTPValidator extends Validator {
 
 }
 
-module.exports = VerifyOTPValidator;
+module.exports = PasswordResetValidator;
