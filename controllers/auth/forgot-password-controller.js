@@ -26,7 +26,7 @@ module.exports = class ForgotPasswordController {
 
         // generate otp
         user.otp = Math.floor(Math.random() * 9000) + 1000;
-        user.save();
+        await user.save();
 
         // send otp
         if (user.email) {
