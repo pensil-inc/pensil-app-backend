@@ -101,7 +101,7 @@ module.exports = class AuthenticationController {
         }
 
         // check if user verified
-        if (user.isVerified) {
+        if (user.isVerified && user.otp === null) {
             return ResponseHelper.response403(res, null, "User already verified!");
         }
 
