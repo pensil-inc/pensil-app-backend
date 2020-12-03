@@ -34,6 +34,8 @@ const GoogleAuthController = require("../controllers/auth/google-auth-controller
 const ForgotPasswordController = require("../controllers/auth/forgot-password-controller");
 const profileUpdateValidator = require("../validators/auth/profile-update-validator");
 const UpdateVideoValidator = require("../validators/update-video-validator");
+const CreateMaterialValidator = require("../validators/create-material-validator");
+const UpdateMaterialValidator = require("../validators/update-material-validator");
 
 // Authentication Routes
 router.get('/auth/google', GoogleAuthController.invoke);
@@ -76,9 +78,9 @@ router.delete('/video/:id', AuthMiddleware, VideoController.delete);
 
 // materials
 router.get('/batch/:batchId/material', AuthMiddleware, MaterialController.index);
-router.post('/material', AuthMiddleware, MaterialController.create);
+router.post('/material', AuthMiddleware, CreateMaterialValidator.middleware, MaterialController.create);
 router.post('/material/:id/upload', AuthMiddleware, MaterialController.updateMaterial);
-router.post('/material/:id', AuthMiddleware, MaterialController.update);
+router.post('/material/:id', AuthMiddleware, UpdateMaterialValidator.middleware, MaterialController.update);
 router.delete('/material/:id', AuthMiddleware, MaterialController.delete);
 
 // Other

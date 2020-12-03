@@ -131,7 +131,7 @@ module.exports = class MaterialController {
 
         const { id } = req.params;
 
-        const { title, description, batchId, fileUrl, subject, isPrivate } = req.body;
+        const { title, description, fileUrl, subject, isPrivate } = req.body;
 
         if (!Mongoose.isValidObjectId(id)) {
             return res.status(404).json({
@@ -156,18 +156,9 @@ module.exports = class MaterialController {
             })
         }
 
-        const batch = await Batch.findById(batchId);
-
-        if (!batch) {
-            return ResponseHelper.validationResponse(res, {
-                batchId: ["Invalid Batch Id!"]
-            })
-        }
-
 
         material.title = title;
         material.subject = subjectObj._id;
-        material.batch = batch._id;
         material.fileUrl = fileUrl;
         material.description = description;
         material.isPrivate = isPrivate;
