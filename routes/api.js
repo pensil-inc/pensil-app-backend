@@ -33,6 +33,7 @@ const StudentAssignmentController = require("../controllers/student/student-assi
 const GoogleAuthController = require("../controllers/auth/google-auth-controller");
 const ForgotPasswordController = require("../controllers/auth/forgot-password-controller");
 const profileUpdateValidator = require("../validators/auth/profile-update-validator");
+const UpdateVideoValidator = require("../validators/update-video-validator");
 
 // Authentication Routes
 router.get('/auth/google', GoogleAuthController.invoke);
@@ -70,7 +71,7 @@ router.post('/batch/:batchId/assignment/import', AuthMiddleware, AssignmentContr
 router.get('/batch/:batchId/video', AuthMiddleware, VideoController.index);
 router.post('/video', AuthMiddleware, CreateVideoValidator.middleware, VideoController.create);
 router.post('/video/:id/upload', AuthMiddleware, VideoController.updateVideo);
-router.post('/video/:id', AuthMiddleware, CreateVideoValidator.middleware, VideoController.update);
+router.post('/video/:id', AuthMiddleware, UpdateVideoValidator.middleware, VideoController.update);
 router.delete('/video/:id', AuthMiddleware, VideoController.delete);
 
 // materials

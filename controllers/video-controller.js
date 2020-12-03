@@ -75,20 +75,12 @@ module.exports = class VideoController {
     static async update(req, res) {
         const { id } = req.params;
 
-        const { title, description, subject, duration, videoUrl, batchId, thumbnailUrl, quality, isPrivate } = req.body;
+        const { title, description, subject, duration, videoUrl, thumbnailUrl, quality, isPrivate } = req.body;
 
         if (!Mongoose.isValidObjectId(id)) {
             return res.status(404).json({
                 message: "Resource with specific id not found"
             });
-        }
-
-        const batch = await Batch.findById(batchId);
-
-        if (!batch) {
-            return ResponseHelper.validationResponse(res, {
-                batchId: ["Invalid Batch Id!"]
-            })
         }
 
         const video = await Video.findById(id);
@@ -110,7 +102,6 @@ module.exports = class VideoController {
 
         video.title = title;
         video.subject = subjectObj._id;
-        video.batch = batchId._id;
         video.description = description;
         video.duration = duration;
         video.thumbnailUrl = thumbnailUrl;
