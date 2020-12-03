@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
+const SMS = require('../config/twilio');
 
 const ResponseHelper = require('../helpers/response_helper');
 const OTPMail = require('../mails/otp-mail');
@@ -69,6 +70,11 @@ module.exports = class AuthenticationController {
                 otp: user.otp,
                 user
             })).send()
+        }
+
+        if(user.mobile) {
+            (new SMS("+91" + user.mobile, 'Hi, Your OTP for registration on pensil is ' + user.otp))
+            .send();
         }
 
         // return response
