@@ -171,7 +171,7 @@ module.exports = class MaterialController {
 
         return res.json({
             message: "Material updated!",
-            video: new MaterialResource(updatedMaterial)
+            material: new MaterialResource(updatedMaterial)
         });
     }
 
