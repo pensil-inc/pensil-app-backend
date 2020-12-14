@@ -146,6 +146,61 @@ module.exports = class AnnouncementController {
 
     }
 
+    static async updateFile(req, res) {
+        const { id } = req.params;
+
+        // Check if file uploaded
+        if (!req.files) {
+            return ResponseHelper.validationResponse(res, { file: ["File is required!"] });
+        }
+
+        const { file } = req.files;
+
+        if (!Mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+
+        // Check if file uploaded
+        if (!file) {
+            return ResponseHelper.validationResponse(res, { file: ["File is required!"] });
+        }
+
+        const announcement = await Announcement.findById(id);
+
+        if (!announcement) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        // get file content
+        const { data, mimetype, name, size, tempFilePath } = file;
+
+        const fileName = uuid() + "." + name.split(".").pop();
+
+        // check for previous saved file and delete it
+        if (announcement.image) {
+            try {
+                await fs.unlink(storage.getAnnouncementPath(announcement.image));
+            } catch (error) {
+                console.info("Older file " + announcement.image + " not deleted!");
+            }
+        }
+
+        // save file
+        await fs.writeFile(storage.getAnnouncementPath(fileName), await fs.readFile(tempFilePath));
+
+        announcement.file = fileName;
+
+        await announcement.save();
+
+        return res.json({ announcement: new AnnouncementResource(announcement) });
+
+    }
+
     static async delete(req, res) {
         const { id } = req.params;
 

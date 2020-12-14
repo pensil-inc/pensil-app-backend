@@ -8,6 +8,7 @@ module.exports = class AnnouncementResource extends Resource {
             batches: resource.batches,
             description: resource.description,
             image: resource.image ? storage.getAnnouncementLink(resource.image) : null,
+            file: resource.file ? storage.getAnnouncementLink(resource.file) : null,
             isForAll: resource.isForAll,
             owner: {
                 id: resource.owner._id,

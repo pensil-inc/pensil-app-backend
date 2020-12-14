@@ -9,6 +9,7 @@ const Schema = new mongoose.Schema(
             ref: 'User'
         },
         image: String,
+        file: String,
         isForAll: Boolean,
         batches: [{
             type: mongoose.Types.ObjectId,
