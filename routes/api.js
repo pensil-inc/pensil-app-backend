@@ -36,6 +36,7 @@ const profileUpdateValidator = require("../validators/auth/profile-update-valida
 const UpdateVideoValidator = require("../validators/update-video-validator");
 const CreateMaterialValidator = require("../validators/create-material-validator");
 const UpdateMaterialValidator = require("../validators/update-material-validator");
+const StudentTimelineController = require("../controllers/student/student-timeline");
 
 // Authentication Routes
 router.get('/auth/google', GoogleAuthController.invoke);
@@ -101,8 +102,7 @@ router.use('/student', AuthMiddleware, (function () {
     router.get('/batch/:batchId/assignment/:assignmentId', StudentAssignmentController.detailByBatch);
     router.get('/my-polls', StudentPollController.index);
     router.post('/poll/:id/vote', PollVoteValidator.middleware, StudentPollController.vote);
-
-    router.get('/')
+    router.get('/batch/:batchId/timeline', StudentTimelineController.__invoke);
 
     return router;
 })());
