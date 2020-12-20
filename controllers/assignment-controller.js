@@ -210,7 +210,13 @@ module.exports = class AssignmentController {
     static async delete(req, res) {
         const { batchId, assignmentId } = req.params;
 
-        if (!Mongoose.isValidObjectId(id)) {
+        if (!Mongoose.isValidObjectId(assignmentId)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        if (!Mongoose.isValidObjectId(batchId)) {
             return res.status(404).json({
                 message: "Resource with specific id not found"
             });
