@@ -208,7 +208,7 @@ module.exports = class AssignmentController {
 
     // Delte assignment
     static async delete(req, res) {
-        const { id } = req.params;
+        const { batchId, assignmentId } = req.params;
 
         if (!Mongoose.isValidObjectId(id)) {
             return res.status(404).json({
@@ -216,8 +216,16 @@ module.exports = class AssignmentController {
             });
         }
 
+        const batch = await Batch.findById(batchId);
+
+        if (!batch) {
+            return ResponseHelper.validationResponse(res, {
+                batchId: ["Invalid Batch Id!"]
+            })
+        }
+
         const assignment = await Assignment.findOne({
-            _id: id,
+            _id: assignmentId,
             owner: req.user.id
         });
 
