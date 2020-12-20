@@ -8,7 +8,7 @@ module.exports = class VideoResource extends Resource {
             id: resource._id,
             title: resource.title,
             subject: resource.subject.name,
-            batch: resource.batch ? resource.batch._id : null,
+            batchId: resource.batch ? resource.batch._id : null,
             description: resource.description,
             duration: resource.duration,
             thumbnailUrl: resource.thumbnailUrl,
