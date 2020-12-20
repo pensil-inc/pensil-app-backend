@@ -48,7 +48,7 @@ module.exports = class TeacherTimelineController {
         batch.videos = TeacherTimelineController.toTimelineObject(new VideoResource(await Video.find({ batch: batch._id }).populate('subject')), "video");
 
         // get materials
-        batch.materials = TeacherTimelineController.toTimelineObject(new MaterialResource(await Material.find({ batch: batch._id })), "material");
+        batch.materials = TeacherTimelineController.toTimelineObject(new MaterialResource(await Material.find({ batch: batch._id }).populate('subject')), "material");
 
         const timeline = [
             ...batch.announcements,
