@@ -45,6 +45,25 @@ module.exports = class AssignmentController {
      * @param {*} res 
      */
 
+    static async detailByBatch(req, res) {
+        const { batchId, assignmentId } = req.params;
+
+        const batch = await Batch.findById(batchId);
+
+        if (!batch) {
+            return ResponseHelper.validationResponse(res, {
+                batchId: ["Invalid Batch Id!"]
+            })
+        }
+
+        const assignment = await Assignment.find({
+            batch: batch._id,
+            _id: assignmentId
+        });
+
+        return res.json({ assignment: new AssignmentResource(assignment) });
+     }
+
 
 
     /**
