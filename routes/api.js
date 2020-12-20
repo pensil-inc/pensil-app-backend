@@ -73,6 +73,7 @@ router.delete('/poll/:id', AuthMiddleware, PollController.delete);
 router.get('/batch/:batchId/assignment', AuthMiddleware, AssignmentController.listByBatch);
 router.get('/batch/:batchId/assignment/:assignmentId', AuthMiddleware, AssignmentController.detailByBatch);
 router.post('/batch/:batchId/assignment/import', AuthMiddleware, AssignmentController.import);
+router.delete('/batch/:batchId/assignment/:assignmentId', AuthMiddleware, AssignmentController.delete);
 
 // Videos
 router.get('/batch/:batchId/video', AuthMiddleware, VideoController.index);
