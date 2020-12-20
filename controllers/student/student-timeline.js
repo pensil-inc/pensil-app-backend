@@ -33,10 +33,13 @@ module.exports = class StudentTimelineController {
         }
 
         // get announcements
-        batch.announcements = StudentTimelineController.toTimelineObject((await Announcement.find({ batches: batch._id })).map(announcement => ({
+        batch.announcements = StudentTimelineController.toTimelineObject((await Announcement.find({ batches: batch._id }).populate('owner')).map(announcement => ({
             id: announcement.id,
             description: announcement.description,
-            owner: announcement.owner,
+            owner: {
+                id: announcement.owner._id,
+                name: announcement.owner.name,
+            },
             createdAt: announcement.createdAt,
             updatedAt: announcement.updatedAt,
         })), "announcement");
