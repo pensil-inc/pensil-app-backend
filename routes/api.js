@@ -37,6 +37,7 @@ const UpdateVideoValidator = require("../validators/update-video-validator");
 const CreateMaterialValidator = require("../validators/create-material-validator");
 const UpdateMaterialValidator = require("../validators/update-material-validator");
 const StudentTimelineController = require("../controllers/student/student-timeline");
+const TeacherTimelineController = require("../controllers/student/teacher-timeline");
 
 // Authentication Routes
 router.get('/auth/google', GoogleAuthController.invoke);
@@ -52,6 +53,7 @@ router.post('/batch', AuthMiddleware, CreateBatchValidator.middleware, BatchCont
 router.get('/batch/:id', AuthMiddleware, BatchController.details);
 router.post('/batch/:id', AuthMiddleware, CreateBatchValidator.middleware, BatchController.update);
 router.delete('/batch/:id', AuthMiddleware, BatchController.delete);
+router.get('/batch/:batchId/timeline', TeacherTimelineController.__invoke);
 
 
 // Announcements
