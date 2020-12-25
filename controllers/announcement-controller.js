@@ -36,7 +36,7 @@ module.exports = class AnnouncementController {
      * @param {*} res 
      */
     static async index(req, res) {
-        const announcements = await Announcement.find({ owner: req.user.id })
+        const announcements = await Announcement.find({ owner: req.user.id, isForAll: true })
             .populate('owner');
 
         return res.json({ announcements: new AnnouncementResource(announcements) });
@@ -194,6 +194,33 @@ module.exports = class AnnouncementController {
         await fs.writeFile(storage.getAnnouncementPath(fileName), await fs.readFile(tempFilePath));
 
         announcement.file = fileName;
+
+        await announcement.save();
+
+        return res.json({ announcement: new AnnouncementResource(announcement) });
+
+    }
+
+    static async update(req, res) {
+        const { description } = req.body;
+
+        const { id } = req.params;
+
+        if (!Mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        const announcement = await Announcement.findById(id);
+
+        if (!announcement) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        announcement.description = description;
 
         await announcement.save();
 

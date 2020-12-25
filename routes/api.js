@@ -62,6 +62,7 @@ router.get('/batch/:batchId/announcement', AuthMiddleware, AnnouncementControlle
 router.post('/announcement', AuthMiddleware, CreateAnnouncementValidator.middleware, AnnouncementController.create);
 router.post('/announcement/:id/upload', AuthMiddleware, AnnouncementController.updateImage);
 router.post('/announcement/:id/doc/upload', AuthMiddleware, AnnouncementController.updateFile);
+router.post('/announcement/:id', AuthMiddleware, AnnouncementController.update);
 router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete);
 
 // Polls
