@@ -13,6 +13,10 @@ echo ""
 git pull
 
 echo ""
+
+git log -1 --oneline
+
+echo ""
 echo "Pull complete! Please see above for the status!"
 echo ""
 echo "Refreshing the app!"
