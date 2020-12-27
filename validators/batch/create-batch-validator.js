@@ -8,7 +8,7 @@ class CreateBatchValidator extends Validator {
          */
         rules = {
             name: "required|string",
-            description: "required|string",
+            description: "string",
             subject: "string",
             classes: "array",
             "classes.*.dayOfWeek": "required|integer|min:1|max:7",

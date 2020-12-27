@@ -40,16 +40,22 @@ module.exports = class BatchController {
             classes
         } = req.body;
 
-        // update/add subjects if needed
-        let sub = await Subject.findOne({
-            name: subject
-        });
+        // if request has a subject name, either find it or create it
+        let sub = null;
+        if (subject) {
 
-        if (!sub) {
-            sub = await Subject.create({
-                name: subject,
-                createdBy: req.user.id
+            // update/add subjects if needed
+            sub = await Subject.findOne({
+                name: subject
             });
+
+            if (!sub) {
+                sub = await Subject.create({
+                    name: subject,
+                    createdBy: req.user.id
+                });
+            }
+
         }
 
         // check for all the students (if they are in the db)
@@ -88,7 +94,7 @@ module.exports = class BatchController {
         const batch = await Batch.create({
             name,
             description,
-            subject: sub._id,
+            subject: sub ? sub._id : null,
             owner: req.user._id,
             startTime,
             endTime,
@@ -161,16 +167,22 @@ module.exports = class BatchController {
             classes
         } = req.body;
 
-        // update/add subjects if needed
-        let sub = await Subject.findOne({
-            name: subject
-        });
+        // if request has a subject name, either find it or create it
+        let sub = null;
+        if (subject) {
 
-        if (!sub) {
-            sub = await Subject.create({
-                name: subject,
-                createdBy: req.user.id
+            // update/add subjects if needed
+            sub = await Subject.findOne({
+                name: subject
             });
+
+            if (!sub) {
+                sub = await Subject.create({
+                    name: subject,
+                    createdBy: req.user.id
+                });
+            }
+
         }
 
         // check for all the students (if they are in the db)
@@ -208,7 +220,7 @@ module.exports = class BatchController {
         // everything good, edit the batch
         batch.name = name;
         batch.description = description;
-        batch.subject = sub._id;
+        batch.subject = sub ? sub._id : null;
         batch.owner = req.user._id;
         batch.startTime = startTime;
         batch.endTime = endTime;
@@ -219,7 +231,7 @@ module.exports = class BatchController {
         await batch.save();
 
         return res.json({ batch });
-     }
+    }
 
     /**
      * Delete the batch
