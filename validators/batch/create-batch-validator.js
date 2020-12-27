@@ -10,11 +10,11 @@ class CreateBatchValidator extends Validator {
             name: "required|string",
             description: "required|string",
             subject: "string",
-            classes: "array|required",
+            classes: "array",
             "classes.*.dayOfWeek": "required|integer|min:1|max:7",
             "classes.*.startTime": 'required|string|min:5|max:5',
             "classes.*.endTime": 'required|string|min:5|max:5',
-            students: "array|required",
+            students: "array",
             "students.*": "required|digit:10"
         };
 
