@@ -5,6 +5,11 @@ const Schema = new mongoose.Schema(
         question: String,
         options: [String],
         endTime: Date,
+        isExpired: {
+            type: Boolean,
+            default: false,
+            required: true,
+        },
         owner: {
             type: mongoose.Types.ObjectId,
             required: false,

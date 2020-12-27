@@ -1,5 +1,6 @@
 const PollAnswerResource = require('./poll-answer-resource');
 const Resource = require('./resource');
+const moment = require('moment');
 
 module.exports = class PollResource extends Resource {
 
@@ -21,13 +22,13 @@ module.exports = class PollResource extends Resource {
         const totalAnswers = answers.length;
 
         // for each answer increase the option count
-        for(const answer of answers) {
+        for (const answer of answers) {
             votes[answer]++;
         }
 
         // convert the votes to ratio
         for (const option of options) {
-            if(votes[option]>0) {
+            if (votes[option] > 0) {
                 votes[option] /= totalAnswers;
             } else {
                 votes[option] = 0;
@@ -41,6 +42,7 @@ module.exports = class PollResource extends Resource {
             question: resource.question,
             options: resource.options,
             endTime: resource.endTime,
+            isExpired: resource.isExpired ? resource.isExpired : moment(resource.endTime).isBefore(moment()) ? true : false,
             batches: resource.batches,
             isForAll: true,
             answers: new PollAnswerResource(resource.answers),

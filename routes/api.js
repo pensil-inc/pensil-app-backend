@@ -68,6 +68,7 @@ router.delete('/announcement/:id', AuthMiddleware, AnnouncementController.delete
 // Polls
 router.get('/poll', AuthMiddleware, PollController.index);
 router.post('/poll', AuthMiddleware, CreatePollValidator.middleware, PollController.create);
+router.post('/poll/:id/end', AuthMiddleware, PollController.end);
 router.delete('/poll/:id', AuthMiddleware, PollController.delete);
 
 // Assignments

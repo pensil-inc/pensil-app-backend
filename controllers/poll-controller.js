@@ -3,6 +3,7 @@ const Mongoose = require("mongoose");
 const PollNotification = require("../notifications/poll-notification");
 const PollResource = require("../resources/poll-resource");
 const Batch = require("../models/batch");
+const moment = require('moment');
 
 module.exports = class PollController {
     // List all polls by batch Id
@@ -84,6 +85,39 @@ module.exports = class PollController {
         }
 
         return res.json({ poll: new PollResource(poll) })
+    }
+
+    static async end(req, res) {
+        const { id } = req.params;
+
+        if (!Mongoose.isValidObjectId(id)) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        const poll = await Poll.findOne({
+            _id: id,
+            owner: req.user.id
+        });
+
+        if (!poll) {
+            return res.status(404).json({
+                message: "Resource with specific id not found"
+            });
+        }
+
+        // update the end time to now
+        poll.endTime = moment();
+        poll.isExpired = true;
+
+        await poll.save();
+
+        return res.json({
+            message: "Poll set to expired!",
+            poll: new PollResource(poll)
+        });
+
     }
 
     static async delete(req, res) {
