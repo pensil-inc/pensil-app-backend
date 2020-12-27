@@ -7,7 +7,7 @@ module.exports = class MaterialResource extends Resource {
         return {
             id: resource._id,
             title: resource.title,
-            subject: resource.subject.name,
+            subject: resource.subject ? resource.subject.name : null,
             batch: resource.batch ? resource.batch._id : null,
             description: resource.description,
             fileUrl: resource.fileUrl,

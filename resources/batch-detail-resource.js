@@ -10,7 +10,7 @@ module.exports = class BatchDetailResource extends Resource {
             id: resource.id,
             students: new StudentListResource(resource.students),
             name: resource.name,
-            subject: resource.subject.name,
+            subject: resource.subject ? resource.subject.name : null,
             owner: resource.owner,
             classes: resource.classes,
             announcements: resource.announcements
