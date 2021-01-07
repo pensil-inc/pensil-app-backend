@@ -7,6 +7,7 @@
 var app = require('../index');
 var debug = require('debug')('express-generator-test:server');
 var http = require('http');
+var https = require('https');
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +20,14 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = process.env.APP_ENV === 'development' ?
+    http.createServer(app) :
+    https.createServer(
+        {
+            key: fs.readFileSync(process.env.SSL_KEY, 'utf8'),
+            cert: fs.readFileSync(process.env.SSL_CERT, 'utf8')
+        },
+        app);
 
 /**
  * Listen on provided port, on all network interfaces.
