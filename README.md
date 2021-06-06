@@ -38,6 +38,10 @@ Upload Study Material                |  Upload Video               | Upload Assi
 ![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-13.jpg?raw=true) | ![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-14.jpg?raw=true)|![](https://github.com/pensil-inc/flutter_pensil_app/blob/master/screenshots/screenshot-15.jpg?raw=true)
 
 </details>
+
+## Documentation
+
+Refer to [Postman Documentation](https://documenter.getpostman.com/view/5108070/TzY68DVa)
   
 ## Project Setup
   
@@ -68,7 +72,9 @@ You can either use [Atlas](https://www.mongodb.com/cloud/atlas) or install [Mong
 
 #### 7. Setting Up Env Variables
 
-Insert the values for different variables according to your use case
+Insert the values for different variables according to your use case,
+
+Please change the `APP_KEY` to something else, as this is also used for credential encryption etc.
 
 ```env
 PORT=3000
