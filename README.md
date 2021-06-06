@@ -260,7 +260,8 @@ AWS_SECRET_KEY=
 ## Dependencies
 <details>
      <summary> Click to expand </summary>
-
+ 
+``` sh
 v8-engine@1.0.0 /mnt/d/Workspace/Pensil/pensil-backend
 ├── aws-sdk@2.783.0
 ├── bcrypt@5.0.0
@@ -290,6 +291,7 @@ v8-engine@1.0.0 /mnt/d/Workspace/Pensil/pensil-backend
 ├── uuid@8.3.1
 ├── validatorjs@3.19.0
 └── web-push@3.4.4
+```
      
 </details>
 
